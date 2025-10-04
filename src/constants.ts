@@ -1,1 +1,1 @@
-export const ONE_MINUTE = 60 * 1000;
+export const ONE_MINUTE_IN_MILLISECONDS = 60 * 1000;

@@ -6,17 +6,17 @@ import Account from './pages/Account';
 import AppLayout from './ui/AppLayout';
 import Bookings from './pages/Bookings';
 import Settings from './pages/Settings';
-import { ONE_MINUTE } from './constants';
 import Dashboard from './pages/Dashboard';
 import PageNotFound from './pages/PageNotFound';
 import GlobalStyles from './styles/GlobalStyles';
+import { ONE_MINUTE_IN_MILLISECONDS } from './constants';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 const queryClient = new QueryClient({
     defaultOptions: {
         queries: {
-            staleTime: ONE_MINUTE,
+            staleTime: ONE_MINUTE_IN_MILLISECONDS,
         },
     },
 });
