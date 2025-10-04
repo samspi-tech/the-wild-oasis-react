@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { NavLink } from 'react-router-dom';
-import { SidebarNavLinks } from './dataSource';
+import { sidebarNavLinks } from './dataSource';
 
 const NavList = styled.ul`
     gap: 0.8rem;
@@ -51,7 +51,7 @@ export default function MainNav() {
     return (
         <nav>
             <NavList>
-                {SidebarNavLinks.map((link) => {
+                {sidebarNavLinks.map((link) => {
                     const { id, to, icon, name } = link;
                     const Icon = icon;
 

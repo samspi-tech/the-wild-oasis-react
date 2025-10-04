@@ -6,7 +6,7 @@ import {
     HiOutlineCalendarDays,
 } from 'react-icons/hi2';
 
-export const SidebarNavLinks = [
+export const sidebarNavLinks = [
     {
         id: 'sidenav-link-1',
         to: '/',
