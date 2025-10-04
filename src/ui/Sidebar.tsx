@@ -1,6 +1,6 @@
 import Logo from './Logo';
-import MainNav from './MainNav';
 import styled from 'styled-components';
+import MainNav from './mainNav/MainNav';
 
 const StyledSidebar = styled.aside`
     grid-row: 1 / -1;
