@@ -9,17 +9,9 @@ import Settings from './pages/Settings';
 import Dashboard from './pages/Dashboard';
 import PageNotFound from './pages/PageNotFound';
 import GlobalStyles from './styles/GlobalStyles';
-import { ONE_MINUTE_IN_MILLISECONDS } from './constants';
+import { queryClient } from './query/queryClient';
+import { QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-
-const queryClient = new QueryClient({
-    defaultOptions: {
-        queries: {
-            staleTime: ONE_MINUTE_IN_MILLISECONDS,
-        },
-    },
-});
 
 export default function App() {
     return (
