@@ -1,4 +1,7 @@
+import { Tables } from '../database.types';
 import { supabase } from '../supabase';
+
+export type Cabins = Tables<'cabins'>;
 
 export async function getAllCabins() {
     const { data, error } = await supabase.from('cabins').select('*');
