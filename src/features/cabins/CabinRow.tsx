@@ -2,6 +2,7 @@ import {
     type Cabins,
     deleteCabin,
 } from '../../lib/supabase/services/cabin.service';
+import toast from 'react-hot-toast';
 import styled from 'styled-components';
 import { formatCurrency } from '../../utils/helpers';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -57,9 +58,14 @@ export default function CabinRow({ cabin }: CabinRowProps) {
     const { mutate: handleDeleteCabin, isPending } = useMutation({
         mutationFn: deleteCabin,
         onSuccess: () => {
+            toast.success('Cabin successfully deleted');
+
             queryClient.invalidateQueries({
                 queryKey: ['cabins'],
             });
+        },
+        onError: (error) => {
+            if (error instanceof Error) toast.error(error.message);
         },
     });
 

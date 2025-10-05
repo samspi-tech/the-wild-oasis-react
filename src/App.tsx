@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Toast from './ui/Toast';
 import Users from './pages/Users';
 import Login from './pages/Login';
 import Cabins from './pages/Cabins';
@@ -16,6 +17,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 export default function App() {
     return (
         <QueryClientProvider client={queryClient}>
+            <Toast />
             <ReactQueryDevtools initialIsOpen={false} />
 
             <GlobalStyles />
