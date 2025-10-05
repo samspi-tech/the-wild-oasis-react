@@ -23,7 +23,9 @@ export default function Cabins() {
                 <Button onClick={handleFormVisibility}>
                     {isFormVisible ? 'Hide form' : 'Add new cabin'}
                 </Button>
-                {isFormVisible && <CreateCabinForm />}
+                {isFormVisible && (
+                    <CreateCabinForm onHide={handleFormVisibility} />
+                )}
             </Row>
         </>
     );

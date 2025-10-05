@@ -1,10 +1,13 @@
+import { Cabins, createCabin } from '../../lib/supabase/services/cabin.service';
 import Form from '../../ui/Form';
 import Input from '../../ui/Input';
+import toast from 'react-hot-toast';
 import Button from '../../ui/Button';
 import styled from 'styled-components';
 import Textarea from '../../ui/Textarea';
 import { useForm } from 'react-hook-form';
 import FileInput from '../../ui/FileInput';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 const FormRow = styled.div`
     gap: 2.4rem;
@@ -37,26 +40,41 @@ const Label = styled.label`
     font-weight: 500;
 `;
 
-const Error = styled.span`
-    font-size: 1.4rem;
-    color: var(--color-red-700);
-`;
+// const Error = styled.span`
+//     font-size: 1.4rem;
+//     color: var(--color-red-700);
+// `;
 
-type FormValues = {
-    name: string;
-    discount: number;
-    maxCapacity: number;
-    description: string;
-    regularPrice: number;
+type CreateCabinFormProps = {
+    onHide: () => void;
 };
 
-export default function CreateCabinForm() {
-    const { register, handleSubmit } = useForm<FormValues>();
+export default function CreateCabinForm({ onHide }: CreateCabinFormProps) {
+    const queryClient = useQueryClient();
 
-    const onSubmit = (data: FormValues) => console.log(data);
+    const { register, handleSubmit, reset } = useForm<Cabins>();
+
+    const { mutate: handleCreateCabin, isPending } = useMutation({
+        mutationFn: createCabin,
+        onSuccess: () => {
+            toast.success('New cabin successfully created 🎉');
+
+            queryClient.invalidateQueries({
+                queryKey: ['cabins'],
+            });
+
+            reset();
+            onHide();
+        },
+        onError: (error) => {
+            if (error instanceof Error) toast.error(error.message);
+        },
+    });
+
+    const submitHandler = (data: Cabins) => handleCreateCabin(data);
 
     return (
-        <Form onSubmit={handleSubmit(onSubmit)}>
+        <Form onSubmit={handleSubmit(submitHandler)}>
             <FormRow>
                 <Label htmlFor="name">Cabin name</Label>
                 <Input type="text" id="name" {...register('name')} />
@@ -99,10 +117,12 @@ export default function CreateCabinForm() {
                 <FileInput id="image" accept="image/*" />
             </FormRow>
             <FormRow>
-                <Button variation="secondary" type="reset">
+                <Button variation="secondary" type="reset" disabled={isPending}>
                     Cancel
                 </Button>
-                <Button type="submit">Edit cabin</Button>
+                <Button type="submit" disabled={isPending}>
+                    {isPending ? 'Creating...' : 'Add cabin'}
+                </Button>
             </FormRow>
         </Form>
     );
