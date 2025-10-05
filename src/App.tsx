@@ -17,9 +17,9 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 export default function App() {
     return (
         <QueryClientProvider client={queryClient}>
-            <Toast />
             <ReactQueryDevtools initialIsOpen={false} />
 
+            <Toast />
             <GlobalStyles />
             <Router>
                 <Routes>

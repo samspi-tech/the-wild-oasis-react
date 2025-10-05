@@ -1,8 +1,17 @@
 import Row from '../ui/Row';
+import { useState } from 'react';
+import Button from '../ui/Button';
 import Heading from '../ui/Heading';
 import CabinTable from '../features/cabins/CabinTable';
+import CreateCabinForm from '../features/cabins/CreateCabinForm';
 
 export default function Cabins() {
+    const [isFormVisible, setIsFormVisible] = useState(false);
+
+    const handleFormVisibility = () => {
+        setIsFormVisible((prevState) => !prevState);
+    };
+
     return (
         <>
             <Row type="horizontal">
@@ -11,6 +20,10 @@ export default function Cabins() {
             </Row>
             <Row>
                 <CabinTable />
+                <Button onClick={handleFormVisibility}>
+                    {isFormVisible ? 'Hide form' : 'Add new cabin'}
+                </Button>
+                {isFormVisible && <CreateCabinForm />}
             </Row>
         </>
     );
