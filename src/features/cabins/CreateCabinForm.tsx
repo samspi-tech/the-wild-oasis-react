@@ -1,63 +1,53 @@
-import { Cabins, createCabin } from '../../lib/supabase/services/cabin.service';
+import * as z from 'zod';
 import Form from '../../ui/Form';
 import Input from '../../ui/Input';
 import toast from 'react-hot-toast';
 import Button from '../../ui/Button';
-import styled from 'styled-components';
+import FormRow from '../../ui/FormRow';
 import Textarea from '../../ui/Textarea';
 import { useForm } from 'react-hook-form';
 import FileInput from '../../ui/FileInput';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { createCabin } from '../../lib/supabase/services/cabin.service';
 
-const FormRow = styled.div`
-    gap: 2.4rem;
-    display: grid;
-    align-items: center;
-    grid-template-columns: 24rem 1fr 1.2fr;
+const cabinSchema = z
+    .object({
+        discount: z.number('This field is required'),
+        maxCapacity: z.number('This field is required'),
+        regularPrice: z.number('This field is required'),
+        name: z.string().min(1, 'This field is required'),
+        description: z.string().min(1, 'This field is required'),
+    })
+    .refine(({ discount, regularPrice }) => discount <= regularPrice, {
+        message: 'Discount should be less or equal than regular price',
+        path: ['discount'],
 
-    padding: 1.2rem 0;
+        when(payload) {
+            return cabinSchema
+                .pick({ discount: true, regularPrice: true })
+                .safeParse(payload.value).success;
+        },
+    });
 
-    &:first-child {
-        padding-top: 0;
-    }
-
-    &:last-child {
-        padding-bottom: 0;
-    }
-
-    &:not(:last-child) {
-        border-bottom: 1px solid var(--color-grey-100);
-    }
-
-    &:has(button) {
-        gap: 1.2rem;
-        display: flex;
-        justify-content: flex-end;
-    }
-`;
-
-const Label = styled.label`
-    font-weight: 500;
-`;
-
-// const Error = styled.span`
-//     font-size: 1.4rem;
-//     color: var(--color-red-700);
-// `;
+export type CabinSchema = z.infer<typeof cabinSchema>;
 
 type CreateCabinFormProps = {
     onHide: () => void;
 };
 
 export default function CreateCabinForm({ onHide }: CreateCabinFormProps) {
-    const queryClient = useQueryClient();
+    const { register, handleSubmit, reset, formState } = useForm<CabinSchema>({
+        resolver: zodResolver(cabinSchema),
+    });
+    const { errors } = formState;
 
-    const { register, handleSubmit, reset } = useForm<Cabins>();
+    const queryClient = useQueryClient();
 
     const { mutate: handleCreateCabin, isPending } = useMutation({
         mutationFn: createCabin,
         onSuccess: () => {
-            toast.success('New cabin successfully created 🎉');
+            toast.success('New cabin successfully created');
 
             queryClient.invalidateQueries({
                 queryKey: ['cabins'],
@@ -71,58 +61,71 @@ export default function CreateCabinForm({ onHide }: CreateCabinFormProps) {
         },
     });
 
-    const submitHandler = (data: Cabins) => handleCreateCabin(data);
+    const submitHandler = (data: CabinSchema) => handleCreateCabin(data);
 
     return (
         <Form onSubmit={handleSubmit(submitHandler)}>
-            <FormRow>
-                <Label htmlFor="name">Cabin name</Label>
-                <Input type="text" id="name" {...register('name')} />
+            <FormRow label="Cabin name" error={errors?.name?.message}>
+                <Input
+                    id="name"
+                    type="text"
+                    autoComplete="on"
+                    disabled={isPending}
+                    {...register('name')}
+                />
             </FormRow>
-            <FormRow>
-                <Label htmlFor="maxCapacity">Maximum capacity</Label>
+            <FormRow
+                label="Maximum capacity"
+                error={errors?.maxCapacity?.message}>
                 <Input
                     type="number"
                     id="maxCapacity"
-                    {...register('maxCapacity')}
+                    disabled={isPending}
+                    {...register('maxCapacity', { valueAsNumber: true })}
                 />
             </FormRow>
-            <FormRow>
-                <Label htmlFor="regularPrice">Regular price</Label>
+            <FormRow
+                label="Regular price"
+                error={errors?.regularPrice?.message}>
                 <Input
                     type="number"
                     id="regularPrice"
-                    {...register('regularPrice')}
+                    disabled={isPending}
+                    {...register('regularPrice', { valueAsNumber: true })}
                 />
             </FormRow>
-            <FormRow>
-                <Label htmlFor="discount">Discount</Label>
+            <FormRow label="Discount" error={errors?.discount?.message}>
                 <Input
                     type="number"
                     id="discount"
-                    defaultValue={0}
-                    {...register('discount')}
+                    disabled={isPending}
+                    {...register('discount', { valueAsNumber: true })}
                 />
             </FormRow>
-            <FormRow>
-                <Label htmlFor="description">Description for website</Label>
+            <FormRow
+                label="Description for website"
+                error={errors?.description?.message}>
                 <Textarea
-                    defaultValue=""
                     id="description"
+                    disabled={isPending}
                     {...register('description')}
                 />
             </FormRow>
-            <FormRow>
-                <Label htmlFor="image">Cabin photo</Label>
+            <FormRow label="Cabin photo">
                 <FileInput id="image" accept="image/*" />
             </FormRow>
             <FormRow>
-                <Button variation="secondary" type="reset" disabled={isPending}>
-                    Cancel
-                </Button>
-                <Button type="submit" disabled={isPending}>
-                    {isPending ? 'Creating...' : 'Add cabin'}
-                </Button>
+                <>
+                    <Button
+                        type="reset"
+                        disabled={isPending}
+                        variation="secondary">
+                        Cancel
+                    </Button>
+                    <Button type="submit" disabled={isPending}>
+                        {isPending ? 'Creating...' : 'Add cabin'}
+                    </Button>
+                </>
             </FormRow>
         </Form>
     );

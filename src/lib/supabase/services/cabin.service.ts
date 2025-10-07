@@ -1,5 +1,6 @@
 import { supabase } from '../supabase';
 import { Tables } from '../database.types';
+import { type CabinSchema } from '../../../features/cabins/CreateCabinForm';
 
 export type Cabins = Tables<'cabins'>;
 
@@ -14,7 +15,7 @@ export async function getAllCabins() {
     return data;
 }
 
-export async function createCabin(payload: Cabins) {
+export async function createCabin(payload: CabinSchema) {
     const { data, error } = await supabase
         .from('cabins')
         .insert([payload])
@@ -22,7 +23,7 @@ export async function createCabin(payload: Cabins) {
 
     if (error) {
         console.error(error);
-        throw new Error('Cabins could not be created');
+        throw new Error('Cabin could not be created');
     }
 
     return data;
