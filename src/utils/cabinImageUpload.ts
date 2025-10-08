@@ -1,5 +1,5 @@
+import { CabinSchema } from '../zod/cabinSchema';
 import { supabase } from '../lib/supabase/supabase';
-import { type CabinSchema } from '../features/cabins/CreateCabinForm';
 
 export function getImageFileDetails(payload: CabinSchema) {
     const imageName = `${Math.random()}-${payload.image.name}`.replaceAll(
