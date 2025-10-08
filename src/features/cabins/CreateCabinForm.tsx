@@ -120,6 +120,7 @@ export default function CreateCabinForm({ onHide }: CreateCabinFormProps) {
                 <FileInput
                     id="image"
                     accept="image/*"
+                    disabled={isPending}
                     onChange={(e) => setValue('image', e.target.files![0])}
                 />
             </FormRow>
