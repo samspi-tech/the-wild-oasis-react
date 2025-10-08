@@ -8,6 +8,7 @@ import Textarea from '../../ui/Textarea';
 import { useForm } from 'react-hook-form';
 import FileInput from '../../ui/FileInput';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { FIVE_MEGABYTES_IN_BYTES } from '../../utils/constants';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createCabin } from '../../lib/supabase/services/cabin.service';
 
@@ -18,6 +19,9 @@ const cabinSchema = z
         regularPrice: z.number('This field is required'),
         name: z.string().min(1, 'This field is required'),
         description: z.string().min(1, 'This field is required'),
+        image: z.file('Image is required').max(FIVE_MEGABYTES_IN_BYTES, {
+            message: 'Image must be less than 5MB',
+        }),
     })
     .refine(({ discount, regularPrice }) => discount <= regularPrice, {
         message: 'Discount should be less or equal than regular price',
@@ -37,9 +41,10 @@ type CreateCabinFormProps = {
 };
 
 export default function CreateCabinForm({ onHide }: CreateCabinFormProps) {
-    const { register, handleSubmit, reset, formState } = useForm<CabinSchema>({
-        resolver: zodResolver(cabinSchema),
-    });
+    const { register, handleSubmit, reset, formState, setValue } =
+        useForm<CabinSchema>({
+            resolver: zodResolver(cabinSchema),
+        });
     const { errors } = formState;
 
     const queryClient = useQueryClient();
@@ -61,10 +66,10 @@ export default function CreateCabinForm({ onHide }: CreateCabinFormProps) {
         },
     });
 
-    const submitHandler = (data: CabinSchema) => handleCreateCabin(data);
+    const onSubmit = (data: CabinSchema) => handleCreateCabin(data);
 
     return (
-        <Form onSubmit={handleSubmit(submitHandler)}>
+        <Form onSubmit={handleSubmit(onSubmit)}>
             <FormRow label="Cabin name" error={errors?.name?.message}>
                 <Input
                     id="name"
@@ -111,8 +116,12 @@ export default function CreateCabinForm({ onHide }: CreateCabinFormProps) {
                     {...register('description')}
                 />
             </FormRow>
-            <FormRow label="Cabin photo">
-                <FileInput id="image" accept="image/*" />
+            <FormRow label="Cabin photo" error={errors?.image?.message}>
+                <FileInput
+                    id="image"
+                    accept="image/*"
+                    onChange={(e) => setValue('image', e.target.files![0])}
+                />
             </FormRow>
             <FormRow>
                 <>

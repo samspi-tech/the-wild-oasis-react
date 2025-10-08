@@ -1,3 +1,7 @@
+import {
+    uploadImage,
+    getImageFileDetails,
+} from '../../../utils/cabinImageUpload';
 import { supabase } from '../supabase';
 import { Tables } from '../database.types';
 import { type CabinSchema } from '../../../features/cabins/CreateCabinForm';
@@ -16,15 +20,25 @@ export async function getAllCabins() {
 }
 
 export async function createCabin(payload: CabinSchema) {
+    const { imageName, imagePath } = getImageFileDetails(payload);
+
+    const newCabin = {
+        ...payload,
+        image: imagePath,
+    };
+
     const { data, error } = await supabase
         .from('cabins')
-        .insert([payload])
+        .insert([newCabin])
         .select();
 
     if (error) {
         console.error(error);
         throw new Error('Cabin could not be created');
     }
+
+    const cabinId = data[0].id;
+    await uploadImage(cabinId, imageName, payload);
 
     return data;
 }

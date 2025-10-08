@@ -1,1 +1,1 @@
-export const ONE_MINUTE_IN_MILLISECONDS = 60 * 1000;
+export const FIVE_MEGABYTES_IN_BYTES = 5_000_000;
