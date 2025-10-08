@@ -4,7 +4,7 @@ import {
 } from '../../../utils/cabinImageUpload';
 import { supabase } from '../supabase';
 import { Tables } from '../database.types';
-import { CabinSchema } from '../../../zod/cabinSchema';
+import { type CabinSchema } from '../../../zod/cabinSchema';
 
 export type Cabins = Tables<'cabins'>;
 
