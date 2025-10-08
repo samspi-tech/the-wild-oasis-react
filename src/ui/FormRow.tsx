@@ -36,12 +36,12 @@ const ErrorMessage = styled.span`
     color: var(--color-red-700);
 `;
 
-type LabelId = { id: string };
+type InputId = { id: string };
 
 type FormRowProps = {
     error?: string;
     label?: string;
-    children: React.ReactElement<LabelId>;
+    children: React.ReactElement<InputId>;
 };
 
 export default function FormRow({ error, label, children }: FormRowProps) {
