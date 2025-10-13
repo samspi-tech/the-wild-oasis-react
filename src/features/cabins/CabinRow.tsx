@@ -1,10 +1,10 @@
 import {
     type Cabins,
     deleteCabin,
-} from '../../lib/supabase/services/cabin.service';
+} from '@/lib/supabase/services/cabin.service';
 import toast from 'react-hot-toast';
 import styled from 'styled-components';
-import { formatCurrency } from '../../utils/helpers';
+import { formatCurrency } from '@/utils/helpers';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 const TableRow = styled.div`
@@ -76,7 +76,7 @@ export default function CabinRow({ cabin }: CabinRowProps) {
             <p>Fits up to {maxCapacity} guests</p>
             <Price>{formatCurrency(regularPrice!)}</Price>
             <Discount>{discount}</Discount>
-            <button onClick={() => handleDeleteCabin(id)} disabled={isPending}>
+            <button disabled={isPending} onClick={() => handleDeleteCabin(id)}>
                 {isPending ? 'Deleting...' : 'Delete'}
             </button>
         </TableRow>

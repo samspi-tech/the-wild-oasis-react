@@ -1,5 +1,5 @@
-import Row from '../ui/Row';
-import Heading from '../ui/Heading';
+import Row from '@/ui/Row';
+import Heading from '@/ui/Heading';
 
 export default function Bookings() {
     return (

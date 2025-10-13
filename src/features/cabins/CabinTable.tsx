@@ -1,8 +1,8 @@
 import CabinRow from './CabinRow';
+import Spinner from '@/ui/Spinner';
 import styled from 'styled-components';
-import Spinner from '../../ui/Spinner';
 import { useQuery } from '@tanstack/react-query';
-import { getAllCabins } from '../../lib/supabase/services/cabin.service';
+import { getAllCabins } from '@/lib/supabase/services/cabin.service';
 
 const Table = styled.div`
     overflow: hidden;

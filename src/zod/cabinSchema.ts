@@ -1,5 +1,5 @@
 import * as z from 'zod';
-import { FIVE_MEGABYTES_IN_BYTES } from '../utils/constants';
+import { FIVE_MEGABYTES_IN_BYTES } from '@/utils/constants';
 
 export const cabinSchema = z
     .object({

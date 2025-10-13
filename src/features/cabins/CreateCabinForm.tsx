@@ -1,15 +1,15 @@
-import Form from '../../ui/Form';
-import Input from '../../ui/Input';
+import Form from '@/ui/Form';
+import Input from '@/ui/Input';
+import Button from '@/ui/Button';
+import FormRow from '@/ui/FormRow';
 import toast from 'react-hot-toast';
-import Button from '../../ui/Button';
-import FormRow from '../../ui/FormRow';
-import Textarea from '../../ui/Textarea';
+import Textarea from '@/ui/Textarea';
+import FileInput from '@/ui/FileInput';
 import { useForm } from 'react-hook-form';
-import FileInput from '../../ui/FileInput';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { cabinSchema, type CabinSchema } from '@/zod/cabinSchema';
+import { createCabin } from '@/lib/supabase/services/cabin.service';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { cabinSchema, type CabinSchema } from '../../zod/cabinSchema';
-import { createCabin } from '../../lib/supabase/services/cabin.service';
 
 type CreateCabinFormProps = {
     onHide: () => void;
@@ -56,7 +56,8 @@ export default function CreateCabinForm({ onHide }: CreateCabinFormProps) {
             </FormRow>
             <FormRow
                 label="Maximum capacity"
-                error={errors?.maxCapacity?.message}>
+                error={errors?.maxCapacity?.message}
+            >
                 <Input
                     type="number"
                     id="maxCapacity"
@@ -66,7 +67,8 @@ export default function CreateCabinForm({ onHide }: CreateCabinFormProps) {
             </FormRow>
             <FormRow
                 label="Regular price"
-                error={errors?.regularPrice?.message}>
+                error={errors?.regularPrice?.message}
+            >
                 <Input
                     type="number"
                     id="regularPrice"
@@ -84,7 +86,8 @@ export default function CreateCabinForm({ onHide }: CreateCabinFormProps) {
             </FormRow>
             <FormRow
                 label="Description for website"
-                error={errors?.description?.message}>
+                error={errors?.description?.message}
+            >
                 <Textarea
                     id="description"
                     disabled={isPending}
@@ -104,7 +107,8 @@ export default function CreateCabinForm({ onHide }: CreateCabinFormProps) {
                     <Button
                         type="reset"
                         disabled={isPending}
-                        variation="secondary">
+                        variation="secondary"
+                    >
                         Cancel
                     </Button>
                     <Button type="submit" disabled={isPending}>

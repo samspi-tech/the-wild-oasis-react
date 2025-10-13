@@ -1,9 +1,9 @@
-import Row from '../ui/Row';
+import Row from '@/ui/Row';
+import Button from '@/ui/Button';
 import { useState } from 'react';
-import Button from '../ui/Button';
-import Heading from '../ui/Heading';
-import CabinTable from '../features/cabins/CabinTable';
-import CreateCabinForm from '../features/cabins/CreateCabinForm';
+import Heading from '@/ui/Heading';
+import CabinTable from '@/features/cabins/CabinTable';
+import CreateCabinForm from '@/features/cabins/CreateCabinForm';
 
 export default function Cabins() {
     const [isFormVisible, setIsFormVisible] = useState(false);

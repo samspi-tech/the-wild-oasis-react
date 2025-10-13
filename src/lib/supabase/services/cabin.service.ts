@@ -1,10 +1,7 @@
-import {
-    uploadImage,
-    getImageFileDetails,
-} from '../../../utils/cabinImageUpload';
-import { supabase } from '../supabase';
-import { Tables } from '../database.types';
-import { type CabinSchema } from '../../../zod/cabinSchema';
+import { supabase } from '@/lib/supabase/supabase';
+import { type CabinSchema } from '@/zod/cabinSchema';
+import { Tables } from '@/lib/supabase/database.types';
+import { uploadImage, getImageFileDetails } from '@/utils/cabinImageUpload';
 
 export type Cabins = Tables<'cabins'>;
 
