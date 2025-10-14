@@ -1,1 +1,0 @@
-export const FIVE_MEGABYTES_IN_BYTES = 5_000_000;
