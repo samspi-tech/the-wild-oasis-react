@@ -51,8 +51,8 @@ export function useCabinMutation({
                 queryKey: ['cabins'],
             });
 
-            reset!();
-            onHide!();
+            reset !== undefined && reset();
+            onHide !== undefined && onHide();
         },
         onError: (error) => {
             if (error instanceof Error) toast.error(error.message);
@@ -89,7 +89,9 @@ export function useCabinMutation({
     return {
         isPending,
         isDeleting,
+        isCreating,
         onSubmit,
         handleDeleteCabin,
+        handleCreateCabin,
     };
 }

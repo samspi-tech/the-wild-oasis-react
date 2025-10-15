@@ -17,13 +17,15 @@ export async function getAllCabins() {
 }
 
 export async function createCabin(payload: CabinSchema) {
-    const { imageName, imagePath } = getImageFileDetails(payload)!;
+    const image = payload.image as string;
+
+    const imageDetails = getImageFileDetails(payload);
 
     const { id, ...fields } = payload;
 
     const newCabin = {
         ...fields,
-        image: imagePath,
+        image: imageDetails?.imagePath || image,
     };
 
     const { data, error } = await supabase
@@ -37,8 +39,10 @@ export async function createCabin(payload: CabinSchema) {
         throw new Error('Cabin could not be created');
     }
 
+    if (payload.image instanceof File === false) return data;
+
     const cabinId = data.id;
-    await uploadImage(cabinId, imageName, payload);
+    await uploadImage(cabinId, imageDetails!.imageName, payload);
 
     return data;
 }
@@ -48,19 +52,10 @@ export async function updateCabin(payload: CabinSchema, id?: number) {
 
     const imageDetails = getImageFileDetails(payload);
 
-    const updatedCabinWithNewImage = {
+    const updatedCabin = {
         ...payload,
-        image: imageDetails?.imagePath,
+        image: imageDetails?.imagePath || image,
     };
-
-    const updatedCabinWithSameImage = {
-        ...payload,
-        image,
-    };
-
-    const updatedCabin = imageDetails?.imageName
-        ? updatedCabinWithNewImage
-        : updatedCabinWithSameImage;
 
     const { data, error } = await supabase
         .from('cabins')

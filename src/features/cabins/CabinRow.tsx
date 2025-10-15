@@ -5,6 +5,7 @@ import CreateCabinForm from './CreateCabinForm';
 import { formatCurrency } from '@/utils/helpers';
 import { type Cabins } from '@/lib/supabase/services/cabin.service';
 import { useCabinMutation } from '@/reactQuery/mutations/useCabinMutation';
+import { HiPencil, HiSquare2Stack, HiTrash } from 'react-icons/hi2';
 
 const TableRow = styled.div`
     display: grid;
@@ -58,7 +59,22 @@ export default function CabinRow({ cabin }: CabinRowProps) {
 
     const { id, name, image, maxCapacity, regularPrice, discount } = cabin;
 
-    const { handleDeleteCabin, isDeleting } = useCabinMutation({});
+    const { handleDeleteCabin, isDeleting, handleCreateCabin, isCreating } =
+        useCabinMutation({});
+
+    const handleDuplicateCabin = () => {
+        const payload = {
+            id: cabin.id,
+            image: cabin.image!,
+            discount: cabin.discount!,
+            name: `Copy of ${cabin.name}`,
+            maxCapacity: cabin.maxCapacity!,
+            description: cabin.description!,
+            regularPrice: cabin.regularPrice!,
+        };
+
+        handleCreateCabin(payload);
+    };
 
     return (
         <>
@@ -71,14 +87,25 @@ export default function CabinRow({ cabin }: CabinRowProps) {
                     {discount ? formatCurrency(discount) : <span>&mdash;</span>}
                 </Discount>
                 <div>
-                    <button onClick={handleEditCabinFormVisibility}>
-                        Edit
+                    <button
+                        disabled={isCreating}
+                        aria-label="Duplicate cabin"
+                        onClick={handleDuplicateCabin}
+                    >
+                        <HiSquare2Stack />
+                    </button>
+                    <button
+                        onClick={handleEditCabinFormVisibility}
+                        aria-label="Show or hide edit cabin form"
+                    >
+                        <HiPencil />
                     </button>
                     <button
                         disabled={isDeleting}
+                        aria-label="Delete cabin"
                         onClick={() => handleDeleteCabin(id)}
                     >
-                        {isDeleting ? 'Deleting...' : 'Delete'}
+                        <HiTrash />
                     </button>
                 </div>
             </TableRow>
