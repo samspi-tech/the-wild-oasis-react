@@ -1,13 +1,10 @@
-import {
-    type Cabins,
-    deleteCabin,
-} from '@/lib/supabase/services/cabin.service';
-import toast from 'react-hot-toast';
-import styled from 'styled-components';
-import { formatCurrency } from '@/utils/helpers';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import CreateCabinForm from './CreateCabinForm';
 import { useState } from 'react';
+import styled from 'styled-components';
+
+import CreateCabinForm from './CreateCabinForm';
+import { formatCurrency } from '@/utils/helpers';
+import { type Cabins } from '@/lib/supabase/services/cabin.service';
+import { useCabinMutation } from '@/reactQuery/mutations/useCabinMutation';
 
 const TableRow = styled.div`
     display: grid;
@@ -61,21 +58,7 @@ export default function CabinRow({ cabin }: CabinRowProps) {
 
     const { id, name, image, maxCapacity, regularPrice, discount } = cabin;
 
-    const queryClient = useQueryClient();
-
-    const { mutate: handleDeleteCabin, isPending } = useMutation({
-        mutationFn: deleteCabin,
-        onSuccess: () => {
-            toast.success('Cabin successfully deleted');
-
-            queryClient.invalidateQueries({
-                queryKey: ['cabins'],
-            });
-        },
-        onError: (error) => {
-            if (error instanceof Error) toast.error(error.message);
-        },
-    });
+    const { handleDeleteCabin, isDeleting } = useCabinMutation({});
 
     return (
         <>
@@ -92,10 +75,10 @@ export default function CabinRow({ cabin }: CabinRowProps) {
                         Edit
                     </button>
                     <button
-                        disabled={isPending}
+                        disabled={isDeleting}
                         onClick={() => handleDeleteCabin(id)}
                     >
-                        {isPending ? 'Deleting...' : 'Delete'}
+                        {isDeleting ? 'Deleting...' : 'Delete'}
                     </button>
                 </div>
             </TableRow>

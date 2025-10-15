@@ -1,4 +1,5 @@
 import {
+    deleteCabin,
     createCabin,
     updateCabin,
 } from '@/lib/supabase/services/cabin.service';
@@ -7,11 +8,16 @@ import { type CabinSchema } from '@/zod/cabinSchema';
 import toast from 'react-hot-toast';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
+type EditCabinArgs = {
+    id?: number;
+    payload: CabinSchema;
+};
+
 type UseCabinMutationArgs = {
     cabinId?: number;
-    reset: () => void;
-    onHide: () => void;
-    isEditCabin: boolean;
+    reset?: () => void;
+    onHide?: () => void;
+    isEditCabin?: boolean;
 };
 
 export function useCabinMutation({
@@ -22,6 +28,20 @@ export function useCabinMutation({
 }: UseCabinMutationArgs) {
     const queryClient = useQueryClient();
 
+    const { mutate: handleDeleteCabin, isPending: isDeleting } = useMutation({
+        mutationFn: deleteCabin,
+        onSuccess: () => {
+            toast.success('Cabin successfully deleted');
+
+            queryClient.invalidateQueries({
+                queryKey: ['cabins'],
+            });
+        },
+        onError: (error) => {
+            if (error instanceof Error) toast.error(error.message);
+        },
+    });
+
     const { mutate: handleCreateCabin, isPending: isCreating } = useMutation({
         mutationFn: createCabin,
         onSuccess: () => {
@@ -31,18 +51,13 @@ export function useCabinMutation({
                 queryKey: ['cabins'],
             });
 
-            reset();
-            onHide();
+            reset!();
+            onHide!();
         },
         onError: (error) => {
             if (error instanceof Error) toast.error(error.message);
         },
     });
-
-    type EditCabinArgs = {
-        id?: number;
-        payload: CabinSchema;
-    };
 
     const { mutate: handleEditCabin, isPending: isUpdating } = useMutation({
         mutationFn: ({ payload, id }: EditCabinArgs) => {
@@ -55,8 +70,8 @@ export function useCabinMutation({
                 queryKey: ['cabins'],
             });
 
-            reset();
-            onHide();
+            reset!();
+            onHide!();
         },
         onError: (error) => {
             if (error instanceof Error) toast.error(error.message);
@@ -71,5 +86,10 @@ export function useCabinMutation({
             : handleCreateCabin(data);
     };
 
-    return { isPending, onSubmit };
+    return {
+        isPending,
+        isDeleting,
+        onSubmit,
+        handleDeleteCabin,
+    };
 }

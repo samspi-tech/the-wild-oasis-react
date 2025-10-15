@@ -1,8 +1,7 @@
 import CabinRow from './CabinRow';
 import Spinner from '@/ui/Spinner';
 import styled from 'styled-components';
-import { useQuery } from '@tanstack/react-query';
-import { getAllCabins } from '@/lib/supabase/services/cabin.service';
+import { useCabinQuery } from '@/reactQuery/queries/useCabinQuery';
 
 const Table = styled.div`
     overflow: hidden;
@@ -28,10 +27,7 @@ const TableHeader = styled.header`
 `;
 
 export default function CabinTable() {
-    const { isLoading, data: cabins } = useQuery({
-        queryKey: ['cabins'],
-        queryFn: getAllCabins,
-    });
+    const { isLoading, cabins } = useCabinQuery();
 
     if (isLoading) return <Spinner />;
 
