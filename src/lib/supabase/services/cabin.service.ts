@@ -17,25 +17,67 @@ export async function getAllCabins() {
 }
 
 export async function createCabin(payload: CabinSchema) {
-    const { imageName, imagePath } = getImageFileDetails(payload);
+    const { imageName, imagePath } = getImageFileDetails(payload)!;
+
+    const { id, ...fields } = payload;
 
     const newCabin = {
-        ...payload,
+        ...fields,
         image: imagePath,
     };
 
     const { data, error } = await supabase
         .from('cabins')
         .insert([newCabin])
-        .select();
+        .select()
+        .single();
 
     if (error) {
         console.error(error);
         throw new Error('Cabin could not be created');
     }
 
-    const cabinId = data[0].id;
+    const cabinId = data.id;
     await uploadImage(cabinId, imageName, payload);
+
+    return data;
+}
+
+export async function updateCabin(payload: CabinSchema, id?: number) {
+    const image = payload.image as string;
+
+    const imageDetails = getImageFileDetails(payload);
+
+    const updatedCabinWithNewImage = {
+        ...payload,
+        image: imageDetails?.imagePath,
+    };
+
+    const updatedCabinWithSameImage = {
+        ...payload,
+        image,
+    };
+
+    const updatedCabin = imageDetails?.imageName
+        ? updatedCabinWithNewImage
+        : updatedCabinWithSameImage;
+
+    const { data, error } = await supabase
+        .from('cabins')
+        .update(updatedCabin)
+        .eq('id', id!)
+        .select()
+        .single();
+
+    if (error) {
+        console.error(error);
+        throw new Error('Cabin could not be created');
+    }
+
+    if (payload.image instanceof File === false) return data;
+
+    const cabinId = data.id;
+    await uploadImage(cabinId, imageDetails!.imageName, payload);
 
     return data;
 }

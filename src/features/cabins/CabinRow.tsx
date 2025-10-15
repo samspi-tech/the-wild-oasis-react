@@ -6,6 +6,8 @@ import toast from 'react-hot-toast';
 import styled from 'styled-components';
 import { formatCurrency } from '@/utils/helpers';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import CreateCabinForm from './CreateCabinForm';
+import { useState } from 'react';
 
 const TableRow = styled.div`
     display: grid;
@@ -51,6 +53,12 @@ type CabinRowProps = {
 };
 
 export default function CabinRow({ cabin }: CabinRowProps) {
+    const [isEditCabinFormVisible, setIsEditCabinFormVisible] = useState(false);
+
+    const handleEditCabinFormVisibility = () => {
+        setIsEditCabinFormVisible((prevState) => !prevState);
+    };
+
     const { id, name, image, maxCapacity, regularPrice, discount } = cabin;
 
     const queryClient = useQueryClient();
@@ -70,15 +78,31 @@ export default function CabinRow({ cabin }: CabinRowProps) {
     });
 
     return (
-        <TableRow>
-            <Img src={image!} alt="Cabin image" />
-            <Cabin>{name}</Cabin>
-            <p>Fits up to {maxCapacity} guests</p>
-            <Price>{formatCurrency(regularPrice!)}</Price>
-            <Discount>{discount}</Discount>
-            <button disabled={isPending} onClick={() => handleDeleteCabin(id)}>
-                {isPending ? 'Deleting...' : 'Delete'}
-            </button>
-        </TableRow>
+        <>
+            <TableRow>
+                <Img src={image!} alt="Cabin image" />
+                <Cabin>{name}</Cabin>
+                <p>Fits up to {maxCapacity} guests</p>
+                <Price>{formatCurrency(regularPrice!)}</Price>
+                <Discount>{discount}</Discount>
+                <div>
+                    <button onClick={handleEditCabinFormVisibility}>
+                        Edit
+                    </button>
+                    <button
+                        disabled={isPending}
+                        onClick={() => handleDeleteCabin(id)}
+                    >
+                        {isPending ? 'Deleting...' : 'Delete'}
+                    </button>
+                </div>
+            </TableRow>
+            {isEditCabinFormVisible && (
+                <CreateCabinForm
+                    cabin={cabin}
+                    onHide={handleEditCabinFormVisibility}
+                />
+            )}
+        </>
     );
 }

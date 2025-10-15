@@ -2,46 +2,52 @@ import Form from '@/ui/Form';
 import Input from '@/ui/Input';
 import Button from '@/ui/Button';
 import FormRow from '@/ui/FormRow';
-import toast from 'react-hot-toast';
 import Textarea from '@/ui/Textarea';
 import FileInput from '@/ui/FileInput';
+
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+
 import { cabinSchema, type CabinSchema } from '@/zod/cabinSchema';
-import { createCabin } from '@/lib/supabase/services/cabin.service';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { type Cabins } from '@/lib/supabase/services/cabin.service';
+import { useCabinMutation } from '@/query/mutations/useCabinMutation';
 
 type CreateCabinFormProps = {
+    cabin?: Cabins;
     onHide: () => void;
 };
 
-export default function CreateCabinForm({ onHide }: CreateCabinFormProps) {
+export default function CreateCabinForm({
+    cabin,
+    onHide,
+}: CreateCabinFormProps) {
+    const isEditCabin = !!cabin?.id;
+    const submitButtonName = isEditCabin ? 'Edit cabin' : 'Add cabin';
+    const pendingStatus = isEditCabin ? 'Updating...' : 'Creating...';
+
     const { register, handleSubmit, reset, formState, setValue } =
         useForm<CabinSchema>({
+            defaultValues: {
+                id: cabin?.id ?? undefined,
+                name: cabin?.name ?? undefined,
+                image: cabin?.image ?? undefined,
+                discount: cabin?.discount ?? undefined,
+                maxCapacity: cabin?.maxCapacity ?? undefined,
+                description: cabin?.description ?? undefined,
+                regularPrice: cabin?.regularPrice ?? undefined,
+            },
             resolver: zodResolver(cabinSchema),
         });
     const { errors } = formState;
 
-    const queryClient = useQueryClient();
+    const cabinId = cabin?.id;
 
-    const { mutate: handleCreateCabin, isPending } = useMutation({
-        mutationFn: createCabin,
-        onSuccess: () => {
-            toast.success('New cabin successfully created');
-
-            queryClient.invalidateQueries({
-                queryKey: ['cabins'],
-            });
-
-            reset();
-            onHide();
-        },
-        onError: (error) => {
-            if (error instanceof Error) toast.error(error.message);
-        },
+    const { isPending, onSubmit } = useCabinMutation({
+        reset,
+        onHide,
+        cabinId,
+        isEditCabin,
     });
-
-    const onSubmit = (data: CabinSchema) => handleCreateCabin(data);
 
     return (
         <Form onSubmit={handleSubmit(onSubmit)}>
@@ -104,15 +110,17 @@ export default function CreateCabinForm({ onHide }: CreateCabinFormProps) {
             </FormRow>
             <FormRow>
                 <>
-                    <Button
-                        type="reset"
-                        disabled={isPending}
-                        variation="secondary"
-                    >
-                        Cancel
-                    </Button>
+                    {!isEditCabin && (
+                        <Button
+                            type="reset"
+                            disabled={isPending}
+                            variation="secondary"
+                        >
+                            Cancel
+                        </Button>
+                    )}
                     <Button type="submit" disabled={isPending}>
-                        {isPending ? 'Creating...' : 'Add cabin'}
+                        {isPending ? pendingStatus : submitButtonName}
                     </Button>
                 </>
             </FormRow>

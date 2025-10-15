@@ -2,7 +2,9 @@ import { supabase } from '@/lib/supabase/supabase';
 import { type CabinSchema } from '@/zod/cabinSchema';
 
 export function getImageFileDetails(payload: CabinSchema) {
-    const imageName = `${Math.random()}-${payload.image.name}`.replaceAll(
+    if (payload.image instanceof File === false) return;
+
+    const imageName = `${Math.random()}-${payload.image?.name}`.replaceAll(
         '/',
         ''
     );
@@ -19,11 +21,13 @@ export async function uploadImage(
     imageName: string,
     payload: CabinSchema
 ) {
-    const imageFile = payload.image;
+    const image = payload.image;
+
+    if (!image) return;
 
     const { error } = await supabase.storage
         .from('cabin-images')
-        .upload(imageName, imageFile);
+        .upload(imageName, image);
 
     if (error) {
         await supabase.from('cabins').delete().eq('id', cabinId);
