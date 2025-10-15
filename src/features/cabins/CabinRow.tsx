@@ -84,7 +84,9 @@ export default function CabinRow({ cabin }: CabinRowProps) {
                 <Cabin>{name}</Cabin>
                 <p>Fits up to {maxCapacity} guests</p>
                 <Price>{formatCurrency(regularPrice!)}</Price>
-                <Discount>{discount}</Discount>
+                <Discount>
+                    {discount ? formatCurrency(discount) : <span>&mdash;</span>}
+                </Discount>
                 <div>
                     <button onClick={handleEditCabinFormVisibility}>
                         Edit
