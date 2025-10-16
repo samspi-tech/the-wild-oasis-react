@@ -21,9 +21,9 @@ export default function CreateCabinForm({
     cabin,
     onHide,
 }: CreateCabinFormProps) {
-    const isEditCabin = !!cabin?.id;
-    const submitButtonName = isEditCabin ? 'Edit cabin' : 'Add cabin';
-    const pendingStatus = isEditCabin ? 'Updating...' : 'Creating...';
+    const isUpdateCabin = !!cabin?.id;
+    const submitButtonName = isUpdateCabin ? 'Update cabin' : 'Add cabin';
+    const pendingStatus = isUpdateCabin ? 'Updating...' : 'Creating...';
 
     const { register, handleSubmit, reset, formState, setValue } =
         useForm<CabinSchema>({
@@ -46,7 +46,7 @@ export default function CreateCabinForm({
         reset,
         onHide,
         cabinId,
-        isEditCabin,
+        isUpdateCabin,
     });
 
     return (
@@ -110,7 +110,7 @@ export default function CreateCabinForm({
             </FormRow>
             <FormRow>
                 <>
-                    {!isEditCabin && (
+                    {!isUpdateCabin && (
                         <Button
                             type="reset"
                             disabled={isPending}

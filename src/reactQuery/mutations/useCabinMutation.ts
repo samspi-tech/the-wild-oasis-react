@@ -8,7 +8,7 @@ import { type CabinSchema } from '@/zod/cabinSchema';
 import toast from 'react-hot-toast';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-type EditCabinArgs = {
+type UpdateCabinArgs = {
     id?: number;
     payload: CabinSchema;
 };
@@ -17,14 +17,14 @@ type UseCabinMutationArgs = {
     cabinId?: number;
     reset?: () => void;
     onHide?: () => void;
-    isEditCabin?: boolean;
+    isUpdateCabin?: boolean;
 };
 
 export function useCabinMutation({
     reset,
     onHide,
     cabinId,
-    isEditCabin,
+    isUpdateCabin,
 }: UseCabinMutationArgs) {
     const queryClient = useQueryClient();
 
@@ -59,8 +59,8 @@ export function useCabinMutation({
         },
     });
 
-    const { mutate: handleEditCabin, isPending: isUpdating } = useMutation({
-        mutationFn: ({ payload, id }: EditCabinArgs) => {
+    const { mutate: handleUpdateCabin, isPending: isUpdating } = useMutation({
+        mutationFn: ({ payload, id }: UpdateCabinArgs) => {
             return updateCabin(payload, id);
         },
         onSuccess: () => {
@@ -78,11 +78,11 @@ export function useCabinMutation({
         },
     });
 
-    const isPending = isEditCabin ? isUpdating : isCreating;
+    const isPending = isUpdateCabin ? isUpdating : isCreating;
 
     const onSubmit = (data: CabinSchema) => {
-        isEditCabin
-            ? handleEditCabin({ payload: data, id: cabinId })
+        isUpdateCabin
+            ? handleUpdateCabin({ payload: data, id: cabinId })
             : handleCreateCabin(data);
     };
 

@@ -51,10 +51,11 @@ type CabinRowProps = {
 };
 
 export default function CabinRow({ cabin }: CabinRowProps) {
-    const [isEditCabinFormVisible, setIsEditCabinFormVisible] = useState(false);
+    const [isUpdateCabinFormVisible, setIsUpdateCabinFormVisible] =
+        useState(false);
 
-    const handleEditCabinFormVisibility = () => {
-        setIsEditCabinFormVisible((prevState) => !prevState);
+    const handleUpdateCabinFormVisibility = () => {
+        setIsUpdateCabinFormVisible((prevState) => !prevState);
     };
 
     const { id, name, image, maxCapacity, regularPrice, discount } = cabin;
@@ -95,8 +96,8 @@ export default function CabinRow({ cabin }: CabinRowProps) {
                         <HiSquare2Stack />
                     </button>
                     <button
-                        onClick={handleEditCabinFormVisibility}
-                        aria-label="Show or hide edit cabin form"
+                        onClick={handleUpdateCabinFormVisibility}
+                        aria-label="Show or hide update cabin form"
                     >
                         <HiPencil />
                     </button>
@@ -109,10 +110,10 @@ export default function CabinRow({ cabin }: CabinRowProps) {
                     </button>
                 </div>
             </TableRow>
-            {isEditCabinFormVisible && (
+            {isUpdateCabinFormVisible && (
                 <CreateCabinForm
                     cabin={cabin}
-                    onHide={handleEditCabinFormVisibility}
+                    onHide={handleUpdateCabinFormVisibility}
                 />
             )}
         </>
