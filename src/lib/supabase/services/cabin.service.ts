@@ -17,15 +17,16 @@ export async function getAllCabins() {
 }
 
 export async function createCabin(payload: CabinSchema) {
-    const image = payload.image as string;
+    const imageFromString = payload.image as string;
 
     const imageDetails = getImageFileDetails(payload);
+    const imageFromFile = imageDetails?.imagePath;
 
     const { id, ...fields } = payload;
 
     const newCabin = {
         ...fields,
-        image: imageDetails?.imagePath || image,
+        image: imageFromFile || imageFromString,
     };
 
     const { data, error } = await supabase
@@ -48,13 +49,14 @@ export async function createCabin(payload: CabinSchema) {
 }
 
 export async function updateCabin(payload: CabinSchema, id?: number) {
-    const image = payload.image as string;
+    const imageFromString = payload.image as string;
 
     const imageDetails = getImageFileDetails(payload);
+    const imageFromFile = imageDetails?.imagePath;
 
     const updatedCabin = {
         ...payload,
-        image: imageDetails?.imagePath || image,
+        image: imageFromFile || imageFromString,
     };
 
     const { data, error } = await supabase
