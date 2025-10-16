@@ -24,14 +24,13 @@ export default function UpdateSettingsForm() {
 
     const handleUpdate = (e: ChangeEvent<HTMLInputElement>) => {
         const { name, valueAsNumber: value } = e.target;
-        if (!value) return;
 
         const payload = { [name]: value };
 
         const isValueNotUpdated =
             settings![name as keyof Settings] === payload[name];
 
-        if (isValueNotUpdated) return;
+        if (!value || isValueNotUpdated) return;
 
         handleUpdateSetting(payload);
     };
