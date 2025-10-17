@@ -16,13 +16,13 @@ type UpdateCabinArgs = {
 type UseCabinMutationArgs = {
     cabinId?: number;
     reset?: () => void;
-    onHide?: () => void;
+    onClose?: () => void;
     isUpdateCabin?: boolean;
 };
 
 export function useCabinMutation({
     reset,
-    onHide,
+    onClose,
     cabinId,
     isUpdateCabin,
 }: UseCabinMutationArgs) {
@@ -51,8 +51,8 @@ export function useCabinMutation({
                 queryKey: ['cabins'],
             });
 
-            reset !== undefined && reset();
-            onHide !== undefined && onHide();
+            reset?.();
+            onClose?.();
         },
         onError: (error) => {
             if (error instanceof Error) toast.error(error.message);
@@ -70,8 +70,8 @@ export function useCabinMutation({
                 queryKey: ['cabins'],
             });
 
-            reset!();
-            onHide!();
+            reset?.();
+            onClose?.();
         },
         onError: (error) => {
             if (error instanceof Error) toast.error(error.message);

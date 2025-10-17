@@ -14,12 +14,12 @@ import { useCabinMutation } from '@/reactQuery/mutations/useCabinMutation';
 
 type CreateCabinFormProps = {
     cabin?: Cabins;
-    onHide: () => void;
+    onClose?: () => void;
 };
 
 export default function CreateCabinForm({
     cabin,
-    onHide,
+    onClose,
 }: CreateCabinFormProps) {
     const isUpdateCabin = !!cabin?.id;
     const submitButtonName = isUpdateCabin ? 'Update cabin' : 'Add cabin';
@@ -44,13 +44,13 @@ export default function CreateCabinForm({
 
     const { isPending, onSubmit } = useCabinMutation({
         reset,
-        onHide,
+        onClose,
         cabinId,
         isUpdateCabin,
     });
 
     return (
-        <Form onSubmit={handleSubmit(onSubmit)}>
+        <Form type={onClose && 'modal'} onSubmit={handleSubmit(onSubmit)}>
             <FormRow label="Cabin name" error={errors?.name?.message}>
                 <Input
                     id="name"
@@ -110,15 +110,14 @@ export default function CreateCabinForm({
             </FormRow>
             <FormRow>
                 <>
-                    {!isUpdateCabin && (
-                        <Button
-                            type="reset"
-                            disabled={isPending}
-                            variation="secondary"
-                        >
-                            Cancel
-                        </Button>
-                    )}
+                    <Button
+                        type="reset"
+                        disabled={isPending}
+                        variation="secondary"
+                        onClick={() => onClose?.()}
+                    >
+                        Cancel
+                    </Button>
                     <Button type="submit" disabled={isPending}>
                         {isPending ? pendingStatus : submitButtonName}
                     </Button>

@@ -1,10 +1,10 @@
 import styled, { css } from 'styled-components';
 
-const TypeIsModal = css`
+const ModalForm = css`
     width: 80rem;
 `;
 
-const TypeIsNotModal = css`
+const RegularForm = css`
     padding: 2.4rem 4rem;
     background-color: var(--color-grey-0);
     border-radius: var(--border-radius-md);
@@ -12,15 +12,19 @@ const TypeIsNotModal = css`
 `;
 
 type FormProps = {
-    type?: 'modal';
+    type?: 'modal' | 'regular';
 };
 
 const Form = styled.form<FormProps>`
     overflow: hidden;
     font-size: 1.4rem;
 
-    ${({ type }) => type === 'modal' && TypeIsModal}
-    ${({ type }) => type !== 'modal' && TypeIsNotModal}
+    ${({ type }) => type === 'modal' && ModalForm}
+    ${({ type }) => type === 'regular' && RegularForm}
 `;
+
+Form.defaultProps = {
+    type: 'regular',
+};
 
 export default Form;

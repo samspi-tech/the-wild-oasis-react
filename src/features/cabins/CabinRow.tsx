@@ -6,6 +6,7 @@ import { formatCurrency } from '@/utils/helpers';
 import { type Cabins } from '@/lib/supabase/services/cabin.service';
 import { useCabinMutation } from '@/reactQuery/mutations/useCabinMutation';
 import { HiPencil, HiSquare2Stack, HiTrash } from 'react-icons/hi2';
+import Modal from '@/ui/Modal';
 
 const TableRow = styled.div`
     display: grid;
@@ -111,10 +112,12 @@ export default function CabinRow({ cabin }: CabinRowProps) {
                 </div>
             </TableRow>
             {isUpdateCabinFormVisible && (
-                <CreateCabinForm
-                    cabin={cabin}
-                    onHide={handleUpdateCabinFormVisibility}
-                />
+                <Modal onClose={handleUpdateCabinFormVisibility}>
+                    <CreateCabinForm
+                        cabin={cabin}
+                        onClose={handleUpdateCabinFormVisibility}
+                    />
+                </Modal>
             )}
         </>
     );
