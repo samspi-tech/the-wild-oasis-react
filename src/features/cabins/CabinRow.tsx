@@ -112,7 +112,7 @@ export default function CabinRow({ cabin }: CabinRowProps) {
                 </div>
             </TableRow>
             {isUpdateCabinFormVisible && (
-                <Modal onClose={handleUpdateCabinFormVisibility}>
+                <Modal>
                     <CreateCabinForm
                         cabin={cabin}
                         onClose={handleUpdateCabinFormVisibility}

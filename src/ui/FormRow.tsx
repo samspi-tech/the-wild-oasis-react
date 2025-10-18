@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { type ReactElement } from 'react';
 
 const StyledFormRow = styled.div`
     gap: 2.4rem;
@@ -41,7 +42,7 @@ type InputId = { id: string };
 type FormRowProps = {
     error?: string;
     label?: string;
-    children: React.ReactElement<InputId>;
+    children: ReactElement<InputId>;
 };
 
 export default function FormRow({ error, label, children }: FormRowProps) {
