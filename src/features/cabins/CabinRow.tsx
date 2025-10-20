@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import styled from 'styled-components';
 
 import CreateCabinForm from './CreateCabinForm';
@@ -7,6 +6,7 @@ import { type Cabins } from '@/lib/supabase/services/cabin.service';
 import { useCabinMutation } from '@/reactQuery/mutations/useCabinMutation';
 import { HiPencil, HiSquare2Stack, HiTrash } from 'react-icons/hi2';
 import Modal from '@/ui/Modal';
+import ConfirmDelete from '@/ui/ConfirmDelete';
 
 const TableRow = styled.div`
     display: grid;
@@ -52,13 +52,6 @@ type CabinRowProps = {
 };
 
 export default function CabinRow({ cabin }: CabinRowProps) {
-    const [isUpdateCabinFormVisible, setIsUpdateCabinFormVisible] =
-        useState(false);
-
-    const handleUpdateCabinFormVisibility = () => {
-        setIsUpdateCabinFormVisible((prevState) => !prevState);
-    };
-
     const { id, name, image, maxCapacity, regularPrice, discount } = cabin;
 
     const { handleDeleteCabin, isDeleting, handleCreateCabin, isCreating } =
@@ -96,29 +89,30 @@ export default function CabinRow({ cabin }: CabinRowProps) {
                     >
                         <HiSquare2Stack />
                     </button>
-                    <button
-                        onClick={handleUpdateCabinFormVisibility}
-                        aria-label="Show or hide update cabin form"
-                    >
-                        <HiPencil />
-                    </button>
-                    <button
-                        disabled={isDeleting}
-                        aria-label="Delete cabin"
-                        onClick={() => handleDeleteCabin(id)}
-                    >
-                        <HiTrash />
-                    </button>
+                    <Modal>
+                        <Modal.OpenWindow opens="update-form">
+                            <button aria-label="Show or hide update cabin form">
+                                <HiPencil />
+                            </button>
+                        </Modal.OpenWindow>
+                        <Modal.Window name="update-form">
+                            <CreateCabinForm cabin={cabin} />
+                        </Modal.Window>
+                        <Modal.OpenWindow opens="delete-cabin">
+                            <button aria-label="Delete cabin">
+                                <HiTrash />
+                            </button>
+                        </Modal.OpenWindow>
+                        <Modal.Window name="delete-cabin">
+                            <ConfirmDelete
+                                isDisabled={isDeleting}
+                                resourceName={`cabin ${name}`}
+                                onConfirm={() => handleDeleteCabin(id)}
+                            />
+                        </Modal.Window>
+                    </Modal>
                 </div>
             </TableRow>
-            {isUpdateCabinFormVisible && (
-                <Modal>
-                    <CreateCabinForm
-                        cabin={cabin}
-                        onClose={handleUpdateCabinFormVisibility}
-                    />
-                </Modal>
-            )}
         </>
     );
 }
