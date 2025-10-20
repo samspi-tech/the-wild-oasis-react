@@ -1,24 +1,14 @@
 import styled from 'styled-components';
+import { HiPencil, HiSquare2Stack, HiTrash } from 'react-icons/hi2';
 
+import Table from '@/ui/Table';
+import Modal from '@/ui/Modal';
+import ConfirmDelete from '@/ui/ConfirmDelete';
 import CreateCabinForm from './CreateCabinForm';
+
 import { formatCurrency } from '@/utils/helpers';
 import { type Cabins } from '@/lib/supabase/services/cabin.service';
 import { useCabinMutation } from '@/reactQuery/mutations/useCabinMutation';
-import { HiPencil, HiSquare2Stack, HiTrash } from 'react-icons/hi2';
-import Modal from '@/ui/Modal';
-import ConfirmDelete from '@/ui/ConfirmDelete';
-
-const TableRow = styled.div`
-    display: grid;
-    column-gap: 2.4rem;
-    align-items: center;
-    padding: 1.4rem 2.4rem;
-    grid-template-columns: 0.6fr 1.8fr 2.2fr 1fr 1fr 1fr;
-
-    &:not(:last-child) {
-        border-bottom: 1px solid var(--color-grey-100);
-    }
-`;
 
 const Img = styled.img`
     width: 6.4rem;
@@ -73,7 +63,7 @@ export default function CabinRow({ cabin }: CabinRowProps) {
 
     return (
         <>
-            <TableRow>
+            <Table.Row>
                 <Img src={image!} alt="Cabin image" />
                 <Cabin>{name}</Cabin>
                 <p>Fits up to {maxCapacity} guests</p>
@@ -98,6 +88,7 @@ export default function CabinRow({ cabin }: CabinRowProps) {
                         <Modal.Window name="update-form">
                             <CreateCabinForm cabin={cabin} />
                         </Modal.Window>
+
                         <Modal.OpenWindow opens="delete-cabin">
                             <button aria-label="Delete cabin">
                                 <HiTrash />
@@ -112,7 +103,7 @@ export default function CabinRow({ cabin }: CabinRowProps) {
                         </Modal.Window>
                     </Modal>
                 </div>
-            </TableRow>
+            </Table.Row>
         </>
     );
 }
