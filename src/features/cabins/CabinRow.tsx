@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { HiPencil, HiSquare2Stack, HiTrash } from 'react-icons/hi2';
 
+import Menus from '@/ui/Menus';
 import Table from '@/ui/Table';
 import Modal from '@/ui/Modal';
 import ConfirmDelete from '@/ui/ConfirmDelete';
@@ -62,38 +63,45 @@ export default function CabinRow({ cabin }: CabinRowProps) {
     };
 
     return (
-        <>
-            <Table.Row>
-                <Img src={image!} alt="Cabin image" />
-                <Cabin>{name}</Cabin>
-                <p>Fits up to {maxCapacity} guests</p>
-                <Price>{formatCurrency(regularPrice!)}</Price>
-                <Discount>
-                    {discount ? formatCurrency(discount) : <span>&mdash;</span>}
-                </Discount>
-                <div>
-                    <button
-                        disabled={isCreating}
-                        aria-label="Duplicate cabin"
-                        onClick={handleDuplicateCabin}
-                    >
-                        <HiSquare2Stack />
-                    </button>
-                    <Modal>
-                        <Modal.OpenWindow opens="update-form">
-                            <button aria-label="Show or hide update cabin form">
-                                <HiPencil />
-                            </button>
-                        </Modal.OpenWindow>
+        <Table.Row>
+            <Img src={image!} alt="Cabin image" />
+            <Cabin>{name}</Cabin>
+            <p>Fits up to {maxCapacity} guests</p>
+            <Price>{formatCurrency(regularPrice!)}</Price>
+            <Discount>
+                {discount ? formatCurrency(discount) : <span>&mdash;</span>}
+            </Discount>
+            <div>
+                <Modal>
+                    <Menus.Menu>
+                        <Menus.Toggles id={id} />
+
+                        <Menus.List id={id}>
+                            <Menus.Button
+                                isDisabled={isCreating}
+                                icon={<HiSquare2Stack />}
+                                onClick={handleDuplicateCabin}
+                            >
+                                Duplicate
+                            </Menus.Button>
+
+                            <Modal.OpenWindow opens="update-form">
+                                <Menus.Button icon={<HiPencil />}>
+                                    Edit
+                                </Menus.Button>
+                            </Modal.OpenWindow>
+
+                            <Modal.OpenWindow opens="delete-cabin">
+                                <Menus.Button icon={<HiTrash />}>
+                                    Delete
+                                </Menus.Button>
+                            </Modal.OpenWindow>
+                        </Menus.List>
+
                         <Modal.Window name="update-form">
                             <CreateCabinForm cabin={cabin} />
                         </Modal.Window>
 
-                        <Modal.OpenWindow opens="delete-cabin">
-                            <button aria-label="Delete cabin">
-                                <HiTrash />
-                            </button>
-                        </Modal.OpenWindow>
                         <Modal.Window name="delete-cabin">
                             <ConfirmDelete
                                 isDisabled={isDeleting}
@@ -101,9 +109,9 @@ export default function CabinRow({ cabin }: CabinRowProps) {
                                 onConfirm={() => handleDeleteCabin(id)}
                             />
                         </Modal.Window>
-                    </Modal>
-                </div>
-            </Table.Row>
-        </>
+                    </Menus.Menu>
+                </Modal>
+            </div>
+        </Table.Row>
     );
 }
