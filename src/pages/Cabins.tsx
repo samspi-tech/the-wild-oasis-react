@@ -2,7 +2,7 @@ import Row from '@/ui/Row';
 import Heading from '@/ui/Heading';
 import AddCabin from '@/features/cabins/AddCabin';
 import CabinTable from '@/features/cabins/CabinTable';
-import CabinTableOperations from '@/features/cabins/CabinTableOperations';
+import CabinTableOperations from '@/features/cabins/cabinTableOperations/CabinTableOperations';
 
 export default function Cabins() {
     return (

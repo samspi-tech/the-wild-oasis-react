@@ -1,17 +1,13 @@
 import styled, { css } from 'styled-components';
 import { useSearchParams } from 'react-router-dom';
+import { Options } from '@/features/cabins/cabinTableOperations/dataSource';
 
 type FilterButtonProps = {
     active: boolean;
 };
 
-type Options = {
-    value: string;
-    label: string;
-};
-
 type FilterProps = {
-    options: Options[];
+    options: Options;
     searchParameter: string;
 };
 
@@ -26,7 +22,7 @@ const StyledFilter = styled.div`
     border: 1px solid var(--color-grey-100);
 `;
 
-const FilterButtonActive = css`
+const ButtonActive = css`
     color: var(--color-brand-50);
     background-color: var(--color-brand-600);
 `;
@@ -40,7 +36,7 @@ const FilterButton = styled.button<FilterButtonProps>`
     background-color: var(--color-grey-0);
     border-radius: var(--border-radius-sm);
 
-    ${({ active }) => active && FilterButtonActive}
+    ${({ active }) => active && ButtonActive}
 
     &:hover:not(:disabled) {
         color: var(--color-brand-50);
@@ -59,16 +55,17 @@ export default function Filter({ searchParameter, options }: FilterProps) {
     return (
         <StyledFilter>
             {options.map((option) => {
-                const { value, label } = option;
+                const { id, value, label } = option;
                 const filter = searchParams.get(searchParameter);
 
                 const hasNoFilter = !filter && label === 'All';
-
                 const isActiveButton = hasNoFilter || filter === value;
 
                 return (
                     <FilterButton
+                        key={id}
                         active={isActiveButton}
+                        disabled={isActiveButton}
                         onClick={() => handleFilter(value)}
                     >
                         {label}

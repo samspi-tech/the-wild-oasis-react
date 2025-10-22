@@ -1,17 +1,17 @@
 import { useSearchParams } from 'react-router-dom';
 import { type Cabins } from '@/lib/supabase/services/cabin.service';
 
-type UseFilterProps<T> = {
+export type UseFilterArgs<T> = {
     datas?: T[];
-    searchParameter: string;
+    param: string;
 };
 
-export default function useCabinFilter<T extends Cabins>({
+export default function useFilter<T extends Cabins>({
     datas,
-    searchParameter,
-}: UseFilterProps<T>) {
+    param,
+}: UseFilterArgs<T>) {
     const [searchParams] = useSearchParams();
-    const filter = searchParams.get(searchParameter) || 'all';
+    const filter = searchParams.get(param) || 'all';
 
     const filteredData = datas?.filter((data) => {
         switch (filter) {
