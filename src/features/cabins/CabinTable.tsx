@@ -3,11 +3,17 @@ import Table from '@/ui/Table';
 import CabinRow from './CabinRow';
 import Spinner from '@/ui/Spinner';
 
+import useCabinFilter from '@/hooks/useCabinFilter';
 import { useCabinQuery } from '@/reactQuery/queries/useCabinQuery';
 import { type Cabins } from '@/lib/supabase/services/cabin.service';
 
 export default function CabinTable() {
     const { isLoading, cabins } = useCabinQuery();
+
+    const filteredCabins = useCabinFilter<Cabins>({
+        datas: cabins,
+        searchParameter: 'discount',
+    });
 
     if (isLoading) return <Spinner />;
 
@@ -23,7 +29,7 @@ export default function CabinTable() {
                     <div></div>
                 </Table.Header>
                 <Table.Body<Cabins>
-                    data={cabins}
+                    data={filteredCabins}
                     render={(cabin) => (
                         <CabinRow key={cabin.id} cabin={cabin} />
                     )}
