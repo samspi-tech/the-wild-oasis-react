@@ -1,3 +1,4 @@
+import Empty from '@/ui/Empty';
 import Menus from '@/ui/Menus';
 import Table from '@/ui/Table';
 import CabinRow from './CabinRow';
@@ -22,6 +23,7 @@ export default function CabinTable() {
     });
 
     if (isLoading) return <Spinner />;
+    if (!sortedCabins?.length) return <Empty resourceName="cabin" />;
 
     return (
         <Menus>
