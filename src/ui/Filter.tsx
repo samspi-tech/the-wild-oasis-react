@@ -1,6 +1,11 @@
 import styled, { css } from 'styled-components';
 import { useSearchParams } from 'react-router-dom';
-import { Options } from '@/features/cabins/cabinTableOperations/dataSource';
+
+export type Options = {
+    id: string;
+    value: string;
+    label: string;
+}[];
 
 type FilterButtonProps = {
     active: boolean;

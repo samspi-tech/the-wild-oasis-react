@@ -1,7 +1,7 @@
 import Select from './Select';
+import { type Options } from './Filter';
 import { type ChangeEvent } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { type Options } from '@/features/cabins/cabinTableOperations/dataSource';
 
 type SortByProps = {
     options: Options;

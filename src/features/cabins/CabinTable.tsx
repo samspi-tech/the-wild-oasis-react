@@ -7,17 +7,16 @@ import Spinner from '@/ui/Spinner';
 import useSort from '@/hooks/useSort';
 import useFilter from '@/hooks/useFilter';
 import { useCabinQuery } from '@/reactQuery/queries/useCabinQuery';
-import { type Cabins } from '@/lib/supabase/services/cabin.service';
 
 export default function CabinTable() {
     const { isLoading, cabins } = useCabinQuery();
 
-    const filteredCabins = useFilter<Cabins>({
+    const filteredCabins = useFilter({
         datas: cabins,
         param: 'discount',
     });
 
-    const sortedCabins = useSort<Cabins>({
+    const sortedCabins = useSort({
         param: 'sortBy',
         datas: filteredCabins,
     });
@@ -36,7 +35,7 @@ export default function CabinTable() {
                     <div>Discount</div>
                     <div></div>
                 </Table.Header>
-                <Table.Body<Cabins>
+                <Table.Body
                     data={sortedCabins}
                     render={(cabin) => (
                         <CabinRow key={cabin.id} cabin={cabin} />

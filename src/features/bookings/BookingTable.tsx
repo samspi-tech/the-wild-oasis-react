@@ -1,11 +1,9 @@
+import Empty from '@/ui/Empty';
 import Menus from '@/ui/Menus';
 import Table from '@/ui/Table';
 import Spinner from '@/ui/Spinner';
 import BookingRow from './BookingRow';
-
-import Empty from '@/ui/Empty';
 import useBookingQuery from '@/reactQuery/queries/useBookingQuery';
-import { type Bookings } from '@/lib/supabase/services/bookings.service';
 
 export default function BookingTable() {
     const { isLoading, bookings } = useBookingQuery();
@@ -24,7 +22,7 @@ export default function BookingTable() {
                     <div>Amount</div>
                     <div></div>
                 </Table.Header>
-                <Table.Body<Bookings>
+                <Table.Body
                     data={bookings}
                     render={(booking) => (
                         <BookingRow key={booking.id} booking={booking} />

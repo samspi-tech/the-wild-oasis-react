@@ -1,6 +1,6 @@
 import styled from 'styled-components';
+import { type Options } from './Filter';
 import { type ChangeEvent } from 'react';
-import { type Options } from '@/features/cabins/cabinTableOperations/dataSource';
 
 type StyledSelectProps = {
     type?: 'white';

@@ -16,10 +16,27 @@ type BookingGuest = {
 
 export type Bookings = Tables<'bookings'> & BookingCabin & BookingGuest;
 
-export async function getAllBookings() {
-    const { data, error } = await supabase
+type FilterAndSort = {
+    name: string;
+    value: string | null;
+};
+
+type GetAllBookingsArgs = {
+    filter: FilterAndSort | null;
+    sortBy: FilterAndSort | null;
+};
+
+export async function getAllBookings({ filter, sortBy }: GetAllBookingsArgs) {
+    let query = supabase
         .from('bookings')
         .select('*, cabins(name), guests(fullName, email)');
+
+    const isAscending = sortBy?.value === 'asc';
+
+    if (filter) query = query.eq(filter.name, filter.value!);
+    if (sortBy) query = query.order(sortBy.name, { ascending: isAscending });
+
+    const { data, error } = await query;
 
     if (error) {
         console.error(error);
