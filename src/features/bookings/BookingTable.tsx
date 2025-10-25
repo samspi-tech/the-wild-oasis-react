@@ -3,10 +3,11 @@ import Menus from '@/ui/Menus';
 import Table from '@/ui/Table';
 import Spinner from '@/ui/Spinner';
 import BookingRow from './BookingRow';
+import Pagination from '@/ui/Pagination';
 import useBookingQuery from '@/reactQuery/queries/useBookingQuery';
 
 export default function BookingTable() {
-    const { isLoading, bookings } = useBookingQuery();
+    const { isLoading, bookings, bookingsCount } = useBookingQuery();
 
     if (isLoading) return <Spinner />;
     if (!bookings?.length) return <Empty resourceName="booking" />;
@@ -28,6 +29,9 @@ export default function BookingTable() {
                         <BookingRow key={booking.id} booking={booking} />
                     )}
                 />
+                <Table.Footer>
+                    <Pagination totalCount={bookingsCount ?? 0} />
+                </Table.Footer>
             </Table>
         </Menus>
     );

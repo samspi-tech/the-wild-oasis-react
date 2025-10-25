@@ -24,24 +24,33 @@ type FilterAndSort = {
 type GetAllBookingsArgs = {
     filter: FilterAndSort | null;
     sortBy: FilterAndSort | null;
+    pages: {
+        from: number;
+        to: number;
+    };
 };
 
-export async function getAllBookings({ filter, sortBy }: GetAllBookingsArgs) {
+export async function getAllBookings({
+    pages,
+    filter,
+    sortBy,
+}: GetAllBookingsArgs) {
     let query = supabase
         .from('bookings')
-        .select('*, cabins(name), guests(fullName, email)');
+        .select('*, cabins(name), guests(fullName, email)', { count: 'exact' });
 
     const isAscending = sortBy?.value === 'asc';
 
+    if (pages) query = query.range(pages.from, pages.to);
     if (filter) query = query.eq(filter.name, filter.value!);
     if (sortBy) query = query.order(sortBy.name, { ascending: isAscending });
 
-    const { data, error } = await query;
+    const { data, count, error } = await query;
 
     if (error) {
         console.error(error);
         throw new Error('Bookings could not be loaded');
     }
 
-    return data;
+    return { data, count };
 }
