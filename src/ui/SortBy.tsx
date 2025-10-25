@@ -8,16 +8,16 @@ type SortByProps = {
 };
 
 export default function SortBy({ options }: SortByProps) {
-    const [searchParam, setSearchParam] = useSearchParams();
+    const [searchParams, setSearchParams] = useSearchParams();
 
     const handleSort = (e: ChangeEvent<HTMLSelectElement>) => {
         const target = e.target.value;
 
-        searchParam.set('sortBy', target);
-        setSearchParam(searchParam);
+        searchParams.set('sortBy', target);
+        setSearchParams(searchParams);
     };
 
-    const sortBy = searchParam.get('sortBy') || '';
+    const sortBy = searchParams.get('sortBy') || '';
 
     return (
         <Select

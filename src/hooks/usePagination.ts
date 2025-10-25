@@ -1,6 +1,6 @@
 import { PAGE_SIZE } from '@/utils/amounts';
 import { useSearchParams } from 'react-router-dom';
-import getCurrentPage from '@/utils/getCurrentPage';
+import { getCurrentPage } from '@/utils/paginationHelpers';
 
 export default function usePagination(totalCount: number) {
     const [searchParams, setSearchParams] = useSearchParams();

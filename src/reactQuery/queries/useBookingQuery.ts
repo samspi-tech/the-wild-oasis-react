@@ -1,6 +1,6 @@
 import { PAGE_SIZE } from '@/utils/amounts';
 import { useSearchParams } from 'react-router-dom';
-import getCurrentPage from '@/utils/getCurrentPage';
+import { getCurrentPage } from '@/utils/paginationHelpers';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { getAllBookings } from '@/lib/supabase/services/bookings.service';
 import { getBookingFilter, getBookingSort } from '@/utils/bookingHelpers';

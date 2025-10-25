@@ -1,5 +1,6 @@
 import styled, { css } from 'styled-components';
 import { useSearchParams } from 'react-router-dom';
+import { handlePageReset } from '@/utils/paginationHelpers';
 
 export type Options = {
     id: string;
@@ -55,6 +56,8 @@ export default function Filter({ searchParameter, options }: FilterProps) {
     const handleFilter = (value: string) => {
         searchParams.set(searchParameter, value);
         setSearchParams(searchParams);
+
+        handlePageReset(searchParams, setSearchParams);
     };
 
     return (
