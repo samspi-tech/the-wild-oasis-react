@@ -1,4 +1,5 @@
 import { supabase } from '../supabase';
+import { PAGE_SIZE } from '@/utils/amounts';
 import { type Tables } from '../database.types';
 
 type BookingCabin = {
@@ -16,34 +17,35 @@ type BookingGuest = {
 
 export type Bookings = Tables<'bookings'> & BookingCabin & BookingGuest;
 
-type FilterAndSort = {
-    name: string;
-    value: string | null;
-};
-
 type GetAllBookingsArgs = {
-    filter: FilterAndSort | null;
-    sortBy: FilterAndSort | null;
-    pages: {
-        from: number;
-        to: number;
+    currentPage: number;
+    filter: {
+        name: string;
+        value: string | null;
+    } | null;
+    sortBy: {
+        field: string;
+        direction: string;
     };
 };
 
 export async function getAllBookings({
-    pages,
     filter,
     sortBy,
+    currentPage,
 }: GetAllBookingsArgs) {
     let query = supabase
         .from('bookings')
         .select('*, cabins(name), guests(fullName, email)', { count: 'exact' });
 
-    const isAscending = sortBy?.value === 'asc';
+    const isAscending = sortBy?.direction === 'asc';
 
-    if (pages) query = query.range(pages.from, pages.to);
+    const startingIndex = (currentPage - 1) * PAGE_SIZE;
+    const lastIndex = startingIndex + PAGE_SIZE - 1;
+
     if (filter) query = query.eq(filter.name, filter.value!);
-    if (sortBy) query = query.order(sortBy.name, { ascending: isAscending });
+    if (currentPage) query = query.range(startingIndex, lastIndex);
+    if (sortBy) query = query.order(sortBy.field, { ascending: isAscending });
 
     const { data, count, error } = await query;
 

@@ -10,3 +10,11 @@ export function getBookingFilter(searchParams: URLSearchParams) {
 
     return hasNoFilter ? null : filter;
 }
+
+export function getBookingSort(searchParams: URLSearchParams) {
+    const sortValue = searchParams.get('sortBy') || 'startDate-asc';
+
+    const [field, direction] = sortValue.split('-');
+
+    return { field, direction };
+}

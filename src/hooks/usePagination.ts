@@ -1,10 +1,10 @@
 import { PAGE_SIZE } from '@/utils/amounts';
-import { getPages } from '@/utils/getPages';
 import { useSearchParams } from 'react-router-dom';
+import getCurrentPage from '@/utils/getCurrentPage';
 
 export default function usePagination(totalCount: number) {
     const [searchParams, setSearchParams] = useSearchParams();
-    const { currentPage } = getPages(searchParams);
+    const currentPage = getCurrentPage(searchParams);
 
     const pageCount = Math.ceil(totalCount / PAGE_SIZE);
 
