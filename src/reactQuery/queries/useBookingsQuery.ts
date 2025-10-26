@@ -5,7 +5,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { getAllBookings } from '@/lib/supabase/services/bookings.service';
 import { getBookingFilter, getBookingSort } from '@/utils/bookingHelpers';
 
-export default function useBookingQuery() {
+export default function useBookingsQuery() {
     const queryClient = useQueryClient();
     const [searchParams] = useSearchParams();
 

@@ -2,12 +2,12 @@ import Empty from '@/ui/Empty';
 import Menus from '@/ui/Menus';
 import Table from '@/ui/Table';
 import Spinner from '@/ui/Spinner';
-import BookingRow from './BookingRow';
 import Pagination from '@/ui/Pagination';
-import useBookingQuery from '@/reactQuery/queries/useBookingQuery';
+import BookingRow from './BookingRow';
+import useBookingsQuery from '@/reactQuery/queries/useBookingsQuery';
 
 export default function BookingTable() {
-    const { isLoading, bookings, bookingsCount } = useBookingQuery();
+    const { isLoading, bookings, bookingsCount } = useBookingsQuery();
 
     if (isLoading) return <Spinner />;
     if (!bookings?.length) return <Empty resourceName="booking" />;

@@ -1,15 +1,14 @@
 import styled from 'styled-components';
+import { formatCurrency } from '@/utils/helpers';
 import { HiPencil, HiSquare2Stack, HiTrash } from 'react-icons/hi2';
+import { type Cabins } from '@/lib/supabase/services/cabin.service';
+import { useCabinMutation } from '@/reactQuery/mutations/useCabinMutation';
 
 import Menus from '@/ui/Menus';
 import Table from '@/ui/Table';
 import Modal from '@/ui/Modal';
 import ConfirmDelete from '@/ui/ConfirmDelete';
 import CreateCabinForm from './CreateCabinForm';
-
-import { formatCurrency } from '@/utils/helpers';
-import { type Cabins } from '@/lib/supabase/services/cabin.service';
-import { useCabinMutation } from '@/reactQuery/mutations/useCabinMutation';
 
 const Img = styled.img`
     width: 6.4rem;

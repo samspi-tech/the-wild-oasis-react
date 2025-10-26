@@ -1,13 +1,13 @@
 import { useSearchParams } from 'react-router-dom';
 import { type Cabins } from '@/lib/supabase/services/cabin.service';
-import { type Bookings } from '@/lib/supabase/services/bookings.service';
+import { type AllBookings } from '@/lib/supabase/services/bookings.service';
 
 export type UseFilterArgs<T> = {
     datas?: T[];
     param: string;
 };
 
-type Datas = Cabins | Bookings;
+type Datas = Cabins | AllBookings;
 
 export default function useFilter<T extends Datas>({
     datas,

@@ -6,7 +6,7 @@ import Spinner from '@/ui/Spinner';
 
 import useSort from '@/hooks/useSort';
 import useFilter from '@/hooks/useFilter';
-import { useCabinQuery } from '@/reactQuery/queries/useCabinQuery';
+import useCabinQuery from '@/reactQuery/queries/useCabinQuery';
 
 export default function CabinTable() {
     const { isLoading, cabins } = useCabinQuery();

@@ -1,6 +1,10 @@
 import { supabase } from '../supabase';
 import { PAGE_SIZE } from '@/utils/amounts';
+import { type Cabins } from './cabin.service';
 import { type Tables } from '../database.types';
+
+type Guests = Tables<'guests'>;
+type Bookings = Tables<'bookings'>;
 
 type BookingCabin = {
     cabins: {
@@ -15,7 +19,11 @@ type BookingGuest = {
     } | null;
 };
 
-export type Bookings = Tables<'bookings'> & BookingCabin & BookingGuest;
+export type AllBookings = Bookings & BookingCabin & BookingGuest;
+
+export type SingleBooking = Bookings & { cabins: Cabins | null } & {
+    guests: Guests | null;
+};
 
 type GetAllBookingsArgs = {
     currentPage: number;
@@ -55,4 +63,19 @@ export async function getAllBookings({
     }
 
     return { data, count };
+}
+
+export async function getSingleBooking(id: number) {
+    const { data, error } = await supabase
+        .from('bookings')
+        .select('*, cabins(*), guests(*)')
+        .eq('id', id)
+        .single();
+
+    if (error) {
+        console.error(error);
+        throw new Error('Booking not found');
+    }
+
+    return data;
 }
