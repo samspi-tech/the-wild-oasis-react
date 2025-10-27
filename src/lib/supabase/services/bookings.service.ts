@@ -43,7 +43,7 @@ export type UpdateBookingArgs = {
     id: number;
     payload: {
         status: string;
-        isPaid: boolean;
+        isPaid?: boolean;
         totalPrice?: number;
         extrasPrice?: number;
         hasBreakfast?: boolean;

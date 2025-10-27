@@ -13,12 +13,12 @@ export default function useBookingsQuery() {
     const filter = getBookingFilter(searchParams);
     const currentPage = getCurrentPage(searchParams);
 
-    const bookingArgs = { filter, sortBy, currentPage };
     const bookingQueryKey = ['bookings', filter, sortBy];
+    const bookingQueryArgs = { filter, sortBy, currentPage };
 
     const { isLoading, data } = useQuery({
         queryKey: [...bookingQueryKey, currentPage],
-        queryFn: () => getAllBookings({ ...bookingArgs }),
+        queryFn: () => getAllBookings({ ...bookingQueryArgs }),
     });
 
     const { data: bookings, count: bookingsCount } = data ?? {};
@@ -32,7 +32,7 @@ export default function useBookingsQuery() {
             queryKey: [...bookingQueryKey, nextPage],
             queryFn: () => {
                 return getAllBookings({
-                    ...bookingArgs,
+                    ...bookingQueryArgs,
                     currentPage: nextPage,
                 });
             },
@@ -44,7 +44,7 @@ export default function useBookingsQuery() {
             queryKey: [...bookingQueryKey, prevPage],
             queryFn: () => {
                 return getAllBookings({
-                    ...bookingArgs,
+                    ...bookingQueryArgs,
                     currentPage: prevPage,
                 });
             },

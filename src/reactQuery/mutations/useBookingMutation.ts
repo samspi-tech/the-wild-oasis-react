@@ -15,14 +15,18 @@ export default function useBookingMutation() {
         mutationFn: ({ id, payload }: UpdateBookingArgs) => {
             return updateBooking({ id, payload });
         },
-        onSuccess: ({ id }) => {
-            toast.success(`Booking #${id} successfully checked in!`);
+        onSuccess: (data) => {
+            const { id, status } = data;
 
-            queryClient.invalidateQueries({
-                queryKey: ['bookings'],
-            });
+            const isCheckIn = status === 'checked-in';
+            const checkStatus = isCheckIn ? 'checked in' : ' checked out';
 
-            navigate('/');
+            toast.success(`Booking #${id} successfully ${checkStatus}!`);
+
+            queryClient.invalidateQueries({ queryKey: ['bookings'] });
+            queryClient.invalidateQueries({ queryKey: ['singleBooking'] });
+
+            isCheckIn && navigate('/');
         },
         onError: (error) => {
             if (error instanceof Error) toast.error(error.message);
