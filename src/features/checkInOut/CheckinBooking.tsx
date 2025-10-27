@@ -11,6 +11,7 @@ import styled from 'styled-components';
 import { useEffect, useState } from 'react';
 import { formatCurrency } from '@/utils/helpers';
 import { useMoveBack } from '@/hooks/useMoveBack';
+import useSettingsQuery from '@/reactQuery/queries/useSettingsQuery';
 import useBookingMutation from '@/reactQuery/mutations/useBookingMutation';
 import useSingleBookingQuery from '@/reactQuery/queries/useSingleBookingQuery';
 
@@ -24,16 +25,18 @@ const Box = styled.div`
 export default function CheckinBooking() {
     const moveBack = useMoveBack();
     const [isConfirmPaid, setIsConfirmPaid] = useState(false);
+    const [isAddBreakfast, setIsAddBreakfast] = useState(false);
     const { isLoading, singleBooking } = useSingleBookingQuery();
     const { isPending, handleUpdateBooking } = useBookingMutation();
+    const { settings, isLoading: isLoadingSettings } = useSettingsQuery();
 
     useEffect(() => {
         const isConfirmed = singleBooking?.isPaid ?? false;
         setIsConfirmPaid(isConfirmed);
     }, [singleBooking]);
 
-    if (!singleBooking) return;
-    if (isLoading) return <Spinner />;
+    if (!singleBooking || !settings) return;
+    if (isLoading || isLoadingSettings) return <Spinner />;
 
     const {
         guests,
@@ -45,9 +48,22 @@ export default function CheckinBooking() {
     } = singleBooking;
 
     const { fullName } = guests!;
+    const { breakfastPrice } = settings!;
+
+    const optionalBreakfastPrice = breakfastPrice! * numGuests! * numNights!;
+    const totalPriceWithBreakfast = totalPrice! + optionalBreakfastPrice;
+
+    const bookingTotalPrice = isAddBreakfast
+        ? totalPriceWithBreakfast
+        : totalPrice;
 
     const handleIsConfirmPaid = () => {
         setIsConfirmPaid((prevState) => !prevState);
+    };
+
+    const handleAddBreakfast = () => {
+        setIsConfirmPaid(false);
+        setIsAddBreakfast((prevState) => !prevState);
     };
 
     const handleCheckIn = () => {
@@ -58,10 +74,24 @@ export default function CheckinBooking() {
             status: 'checked-in',
         };
 
-        handleUpdateBooking({
-            payload,
-            id: bookingId,
-        });
+        const payloadWithBreakfast = {
+            ...payload,
+            hasBreakfast: true,
+            totalPrice: totalPriceWithBreakfast,
+            extrasPrice: optionalBreakfastPrice,
+        };
+
+        if (isAddBreakfast) {
+            handleUpdateBooking({
+                id: bookingId,
+                payload: payloadWithBreakfast,
+            });
+        } else {
+            handleUpdateBooking({
+                payload,
+                id: bookingId,
+            });
+        }
     };
 
     return (
@@ -71,15 +101,34 @@ export default function CheckinBooking() {
                 <ButtonText onClick={moveBack}>&larr; Back</ButtonText>
             </Row>
             <BookingDataBox booking={singleBooking} />
+            {!hasBreakfast && (
+                <Box>
+                    <Checkbox
+                        id="add-breakfast"
+                        isChecked={isAddBreakfast}
+                        onChange={handleAddBreakfast}
+                        isDisabled={isAddBreakfast || isPending}
+                    >
+                        Want to add breakfast for{' '}
+                        {formatCurrency(optionalBreakfastPrice)}?
+                    </Checkbox>
+                </Box>
+            )}
             <Box>
                 <Checkbox
-                    id="confirm"
+                    id="confirm-check-in"
                     isChecked={isConfirmPaid}
                     onChange={handleIsConfirmPaid}
                     isDisabled={isConfirmPaid || isPending}
                 >
                     I confirm that {fullName} has paid the total amount of{' '}
-                    {formatCurrency(totalPrice!)}
+                    {formatCurrency(bookingTotalPrice!)}
+                    {isAddBreakfast && (
+                        <span>
+                            ({formatCurrency(totalPrice!)} +{' '}
+                            {formatCurrency(optionalBreakfastPrice)})
+                        </span>
+                    )}
                 </Checkbox>
             </Box>
             <ButtonGroup>
