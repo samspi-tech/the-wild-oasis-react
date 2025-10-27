@@ -3,10 +3,10 @@ import Table from '@/ui/Table';
 import Menus from '@/ui/Menus';
 
 import styled from 'styled-components';
-import { HiEye } from 'react-icons/hi2';
 import { format, isToday } from 'date-fns';
 import { statusToTagName } from './dataSource';
 import { useNavigate } from 'react-router-dom';
+import { HiArrowDownOnSquare, HiEye } from 'react-icons/hi2';
 import { formatCurrency, formatDistanceFromNow } from '@/utils/helpers';
 import { type AllBookings } from '@/lib/supabase/services/bookings.service';
 
@@ -71,6 +71,8 @@ export default function BookingRow({ booking }: BookingRowProps) {
     const formattedStartDate = format(new Date(startDate!), 'MMM dd yyyy');
     const formattedEndDate = format(new Date(endDate!), 'MMM dd yyyy');
 
+    const isStatusUnconfirmed = status === 'unconfirmed';
+
     return (
         <Table.Row>
             <Cabin>{cabinName}</Cabin>
@@ -99,6 +101,14 @@ export default function BookingRow({ booking }: BookingRowProps) {
                     >
                         See details
                     </Menus.Button>
+                    {isStatusUnconfirmed && (
+                        <Menus.Button
+                            icon={<HiArrowDownOnSquare />}
+                            onClick={() => navigate(`/checkin/${bookingId}`)}
+                        >
+                            Check in
+                        </Menus.Button>
+                    )}
                 </Menus.List>
             </Menus.Menu>
         </Table.Row>

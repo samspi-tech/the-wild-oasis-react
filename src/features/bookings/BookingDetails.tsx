@@ -8,6 +8,7 @@ import BookingDataBox from './BookingDataBox';
 
 import styled from 'styled-components';
 import { statusToTagName } from './dataSource';
+import { useNavigate } from 'react-router-dom';
 import { useMoveBack } from '@/hooks/useMoveBack';
 import { type StatusToTagName } from './BookingRow';
 import { HiChatBubbleBottomCenterText } from 'react-icons/hi2';
@@ -21,18 +22,21 @@ const HeadingGroup = styled.div`
 
 export default function BookingDetails() {
     const moveBack = useMoveBack();
+    const navigate = useNavigate();
     const { isLoading, singleBooking } = useSingleBookingQuery();
 
     if (!singleBooking) return;
     if (isLoading) return <Spinner />;
 
-    const { status, id: bookindId } = singleBooking;
+    const { status, id: bookingId } = singleBooking;
+
+    const isStatusUnconfirmed = status === 'unconfirmed';
 
     return (
         <>
             <Row type="horizontal">
                 <HeadingGroup>
-                    <Heading as="h1">Booking #{bookindId}</Heading>
+                    <Heading as="h1">Booking #{bookingId}</Heading>
                     <Tag
                         type={statusToTagName[status as keyof StatusToTagName]}
                     >
@@ -43,13 +47,16 @@ export default function BookingDetails() {
                     &larr; Back
                 </HiChatBubbleBottomCenterText>
             </Row>
-
             <BookingDataBox booking={singleBooking} />
-
             <ButtonGroup>
                 <Button variation="secondary" onClick={moveBack}>
                     Back
                 </Button>
+                {isStatusUnconfirmed && (
+                    <Button onClick={() => navigate(`/checkin/${bookingId}`)}>
+                        Check in
+                    </Button>
+                )}
             </ButtonGroup>
         </>
     );

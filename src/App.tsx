@@ -5,6 +5,7 @@ import Users from './pages/Users';
 import Cabins from './pages/Cabins';
 import Booking from './pages/Booking';
 import Account from './pages/Account';
+import CheckIn from './pages/CheckIn';
 import AppLayout from './ui/AppLayout';
 import Settings from './pages/Settings';
 import Bookings from './pages/Bookings';
@@ -35,6 +36,10 @@ export default function App() {
                         <Route
                             path="/bookings/:bookingId"
                             element={<Booking />}
+                        />
+                        <Route
+                            path="/checkin/:bookingId"
+                            element={<CheckIn />}
                         />
                     </Route>
 

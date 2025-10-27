@@ -7,7 +7,7 @@ export default function useSingleBookingQuery() {
     const id = Number(bookingId);
 
     const { isLoading, data: singleBooking } = useQuery({
-        queryKey: ['singleBooking'],
+        queryKey: ['singleBooking', bookingId],
         queryFn: () => getSingleBooking(id),
         retry: false,
     });
