@@ -1,4 +1,5 @@
 import {
+    deleteBooking,
     updateBooking,
     type UpdateBookingArgs,
 } from '@/lib/supabase/services/bookings.service';
@@ -11,7 +12,7 @@ export default function useBookingMutation() {
     const navigate = useNavigate();
     const queryClient = useQueryClient();
 
-    const { mutate: handleUpdateBooking, isPending } = useMutation({
+    const { mutate: handleUpdateBooking, isPending: isUpdating } = useMutation({
         mutationFn: ({ id, payload }: UpdateBookingArgs) => {
             return updateBooking({ id, payload });
         },
@@ -33,5 +34,23 @@ export default function useBookingMutation() {
         },
     });
 
-    return { isPending, handleUpdateBooking };
+    const { mutate: handleDeleteBooking, isPending: isDeleting } = useMutation({
+        mutationFn: deleteBooking,
+        onSuccess: () => {
+            toast.success(`Booking successfully deleted`);
+
+            queryClient.invalidateQueries({ queryKey: ['bookings'] });
+            queryClient.invalidateQueries({ queryKey: ['singleBooking'] });
+        },
+        onError: (error) => {
+            if (error instanceof Error) toast.error(error.message);
+        },
+    });
+
+    return {
+        isUpdating,
+        isDeleting,
+        handleUpdateBooking,
+        handleDeleteBooking,
+    };
 }

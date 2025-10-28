@@ -1,10 +1,12 @@
 import Row from '@/ui/Row';
 import Tag from '@/ui/Tag';
+import Modal from '@/ui/Modal';
 import Button from '@/ui/Button';
 import Heading from '@/ui/Heading';
 import Spinner from '@/ui/Spinner';
 import ButtonGroup from '@/ui/ButtonGroup';
 import BookingDataBox from './BookingDataBox';
+import ConfirmDelete from '@/ui/ConfirmDelete';
 
 import styled from 'styled-components';
 import { statusToTagName } from './dataSource';
@@ -25,7 +27,8 @@ export default function BookingDetails() {
     const moveBack = useMoveBack();
     const navigate = useNavigate();
     const { isLoading, singleBooking } = useSingleBookingQuery();
-    const { isPending, handleUpdateBooking } = useBookingMutation();
+    const { isUpdating, isDeleting, handleUpdateBooking, handleDeleteBooking } =
+        useBookingMutation();
 
     if (!singleBooking) return;
     if (isLoading) return <Spinner />;
@@ -33,6 +36,7 @@ export default function BookingDetails() {
     const { status, id: bookingId } = singleBooking;
 
     const isStatusCheckIn = status === 'checked-in';
+    const isStatusCheckOut = status === 'checked-out';
     const isStatusUnconfirmed = status === 'unconfirmed';
 
     const handleCheckOut = () => {
@@ -41,6 +45,12 @@ export default function BookingDetails() {
         handleUpdateBooking({
             payload,
             id: bookingId,
+        });
+    };
+
+    const onDeleteBooking = () => {
+        handleDeleteBooking(bookingId, {
+            onSettled: () => moveBack(),
         });
     };
 
@@ -60,21 +70,39 @@ export default function BookingDetails() {
                 </HiChatBubbleBottomCenterText>
             </Row>
             <BookingDataBox booking={singleBooking} />
-            <ButtonGroup>
-                <Button variation="secondary" onClick={moveBack}>
-                    Back
-                </Button>
-                {isStatusUnconfirmed && (
-                    <Button onClick={() => navigate(`/checkin/${bookingId}`)}>
-                        Check in
+            <Modal>
+                <ButtonGroup>
+                    <Button variation="secondary" onClick={moveBack}>
+                        Back
                     </Button>
-                )}
-                {isStatusCheckIn && (
-                    <Button onClick={handleCheckOut} disabled={isPending}>
-                        Check out
-                    </Button>
-                )}
-            </ButtonGroup>
+                    {isStatusUnconfirmed && (
+                        <Button
+                            onClick={() => navigate(`/checkin/${bookingId}`)}
+                        >
+                            Check in
+                        </Button>
+                    )}
+                    {isStatusCheckIn && (
+                        <Button onClick={handleCheckOut} disabled={isUpdating}>
+                            Check out
+                        </Button>
+                    )}
+                    {isStatusCheckOut && (
+                        <Modal.OpenWindow opens="delete-booking">
+                            <Button variation="danger" disabled={isDeleting}>
+                                Delete
+                            </Button>
+                        </Modal.OpenWindow>
+                    )}
+                </ButtonGroup>
+                <Modal.Window name="delete-booking">
+                    <ConfirmDelete
+                        isDisabled={isDeleting}
+                        onConfirm={onDeleteBooking}
+                        resourceName={`booking #${bookingId}`}
+                    />
+                </Modal.Window>
+            </Modal>
         </>
     );
 }
