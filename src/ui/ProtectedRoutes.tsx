@@ -23,7 +23,7 @@ export default function ProtectedRoutes({ children }: ProtectedRoutesProps) {
 
     useEffect(() => {
         if (!isAuthenticated && !isLoading)
-            navigate('login', { replace: true });
+            navigate('/login', { replace: true });
     }, [isLoading, isAuthenticated, navigate]);
 
     if (isLoading)
