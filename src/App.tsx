@@ -12,6 +12,7 @@ import Bookings from './pages/Bookings';
 import Dashboard from './pages/Dashboard';
 import PageNotFound from './pages/PageNotFound';
 import GlobalStyles from './styles/GlobalStyles';
+import ProtectedRoutes from './ui/ProtectedRoutes';
 import { queryClient } from './reactQuery/queryClient';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
@@ -25,7 +26,13 @@ export default function App() {
             <GlobalStyles />
             <Router>
                 <Routes>
-                    <Route element={<AppLayout />}>
+                    <Route
+                        element={
+                            <ProtectedRoutes>
+                                <AppLayout />
+                            </ProtectedRoutes>
+                        }
+                    >
                         <Route index path="/" element={<Dashboard />} />
                         <Route path="/users" element={<Users />} />
                         <Route path="/cabins" element={<Cabins />} />

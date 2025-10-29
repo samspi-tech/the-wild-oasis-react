@@ -12,3 +12,19 @@ export async function login(payload: AuthPayload) {
 
     return data;
 }
+
+async function getSession() {
+    const { data } = await supabase.auth.getSession();
+    return data.session;
+}
+
+export async function getCurrentUser() {
+    const session = await getSession();
+    if (!session) return null;
+
+    const { data, error } = await supabase.auth.getUser();
+
+    if (error) throw new Error(error.message);
+
+    return data.user;
+}
