@@ -1,14 +1,14 @@
 import styled from 'styled-components';
 
 type HeadingProps = {
-    as: string;
+    center?: boolean;
 };
 
 const Heading = styled.h1<HeadingProps>`
-    ${(props) => props.as}
-
     font-weight: 600;
     line-height: 1.4;
+
+    ${({ center }) => center && 'text-align: center;'}
 `;
 
 export default Heading;

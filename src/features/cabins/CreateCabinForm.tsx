@@ -10,7 +10,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 
 import { cabinSchema, type CabinSchema } from '@/zod/cabinSchema';
 import { type Cabins } from '@/lib/supabase/services/cabin.service';
-import { useCabinMutation } from '@/reactQuery/mutations/useCabinMutation';
+import useCabinMutation from '@/reactQuery/mutations/useCabinMutation';
 
 type CreateCabinFormProps = {
     cabin?: Cabins;

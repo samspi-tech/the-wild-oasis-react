@@ -20,7 +20,7 @@ type UseCabinMutationArgs = {
     isUpdateCabin?: boolean;
 };
 
-export function useCabinMutation({
+export default function useCabinMutation({
     reset,
     onClose,
     cabinId,

@@ -1,4 +1,7 @@
+import Logo from '@/ui/Logo';
+import Heading from '@/ui/Heading';
 import styled from 'styled-components';
+import LoginForm from '@/features/auth/LoginForm';
 
 const LoginLayout = styled.main`
     gap: 3.2rem;
@@ -11,5 +14,13 @@ const LoginLayout = styled.main`
 `;
 
 export default function Login() {
-    return <LoginLayout>Login</LoginLayout>;
+    return (
+        <LoginLayout>
+            <Logo />
+            <Heading center={true} as="h2">
+                Log in to your account
+            </Heading>
+            <LoginForm />
+        </LoginLayout>
+    );
 }

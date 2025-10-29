@@ -2,7 +2,7 @@ import toast from 'react-hot-toast';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { updateSetting } from '@/lib/supabase/services/settings.service';
 
-export function useSettingsMutation() {
+export default function useSettingsMutation() {
     const queryClient = useQueryClient();
 
     const { mutate: handleUpdateSetting, isPending } = useMutation({

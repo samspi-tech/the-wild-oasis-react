@@ -7,7 +7,7 @@ import Spinner from '@/ui/Spinner';
 
 import useSettingsQuery from '@/reactQuery/queries/useSettingsQuery';
 import { type Settings } from '@/lib/supabase/services/settings.service';
-import { useSettingsMutation } from '@/reactQuery/mutations/useSettingsMutation';
+import useSettingsMutation from '@/reactQuery/mutations/useSettingsMutation';
 
 export default function UpdateSettingsForm() {
     const { isLoading, settings } = useSettingsQuery();

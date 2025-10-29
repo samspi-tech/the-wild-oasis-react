@@ -1,13 +1,21 @@
-import styled from 'styled-components';
 import { type ReactElement } from 'react';
+import styled, { css } from 'styled-components';
 
-const StyledFormRow = styled.div`
+type StyledFormRowProps = {
+    type?: 'vertical' | 'horizontal';
+};
+
+const vertical = css`
+    gap: 0.8rem;
+    display: flex;
+    flex-direction: column;
+`;
+
+const horizontal = css`
     gap: 2.4rem;
     display: grid;
     align-items: center;
     grid-template-columns: 24rem 1fr 1.2fr;
-
-    padding: 1.2rem 0;
 
     &:first-child {
         padding-top: 0;
@@ -28,6 +36,12 @@ const StyledFormRow = styled.div`
     }
 `;
 
+const StyledFormRow = styled.div<StyledFormRowProps>`
+    padding: 1.2rem 0;
+
+    ${({ type }) => (type === 'horizontal' ? horizontal : vertical)}
+`;
+
 const Label = styled.label`
     font-weight: 500;
 `;
@@ -43,11 +57,17 @@ type FormRowProps = {
     error?: string;
     label?: string;
     children: ReactElement<InputId>;
+    type?: 'vertical' | 'horizontal';
 };
 
-export default function FormRow({ error, label, children }: FormRowProps) {
+export default function FormRow({
+    error,
+    label,
+    children,
+    type = 'horizontal',
+}: FormRowProps) {
     return (
-        <StyledFormRow>
+        <StyledFormRow type={type}>
             {label && <Label htmlFor={children.props.id}>{label}</Label>}
             {children}
             {error && <ErrorMessage>{error}</ErrorMessage>}
