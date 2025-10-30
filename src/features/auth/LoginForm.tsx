@@ -8,6 +8,7 @@ import Input from '@/ui/Input';
 import Button from '@/ui/Button';
 import FormRow from '@/ui/FormRow';
 import SpinnerMini from '@/ui/SpinnerMini';
+import InputPassword from '@/ui/InputPassword';
 
 export default function LoginForm() {
     const { isLogingIn, handleLogin } = useAuthMutation();
@@ -31,9 +32,9 @@ export default function LoginForm() {
                 <Input
                     id="email"
                     type="email"
+                    autoComplete="email"
                     disabled={isLogingIn}
                     {...register('email')}
-                    autoComplete="username"
                 />
             </FormRow>
             <FormRow
@@ -41,11 +42,10 @@ export default function LoginForm() {
                 label="Password"
                 error={errors?.password?.message}
             >
-                <Input
+                <InputPassword
                     id="password"
-                    type="password"
-                    disabled={isLogingIn}
-                    {...register('password')}
+                    register={register}
+                    isDisabled={isLogingIn}
                     autoComplete="current-password"
                 />
             </FormRow>

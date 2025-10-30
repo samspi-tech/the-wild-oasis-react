@@ -22,8 +22,9 @@ export default function ProtectedRoutes({ children }: ProtectedRoutesProps) {
     const { isLoading, isAuthenticated } = useAuthQuery();
 
     useEffect(() => {
-        if (!isAuthenticated && !isLoading)
+        if (!isAuthenticated && !isLoading) {
             navigate('/login', { replace: true });
+        }
     }, [isLoading, isAuthenticated, navigate]);
 
     if (isLoading)
