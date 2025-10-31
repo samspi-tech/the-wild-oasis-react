@@ -1,8 +1,10 @@
 import {
     login,
     logout,
-    type AuthPayload,
+    signup,
+    type LoginPayload,
 } from '@/lib/supabase/services/auth.service';
+
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -12,9 +14,10 @@ export default function useAuthMutation() {
     const queryClient = useQueryClient();
 
     const { mutate: handleLogin, isPending: isLogingIn } = useMutation({
-        mutationFn: (payload: AuthPayload) => login(payload),
+        mutationFn: (payload: LoginPayload) => login(payload),
         onSuccess: (data) => {
-            toast.success('Welcome back!');
+            const userName = data.user.user_metadata.fullName;
+            toast.success(`Welcome back ${userName ?? 'Admin'}!`);
 
             queryClient.setQueryData(['user'], data.user);
 
@@ -39,10 +42,24 @@ export default function useAuthMutation() {
         },
     });
 
+    const { mutate: handleSignup, isPending: isSigningUp } = useMutation({
+        mutationFn: signup,
+        onSuccess: () => {
+            toast.success(
+                "Account successfully created! Please confirm the new user's email address."
+            );
+        },
+        onError: (error) => {
+            if (error instanceof Error) toast.error(error.message);
+        },
+    });
+
     return {
         isLogingIn,
         isLogingOut,
+        isSigningUp,
         handleLogin,
         handleLogout,
+        handleSignup,
     };
 }

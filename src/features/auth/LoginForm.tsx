@@ -32,9 +32,9 @@ export default function LoginForm() {
                 <Input
                     id="email"
                     type="email"
-                    autoComplete="email"
                     disabled={isLogingIn}
                     {...register('email')}
+                    autoComplete="username"
                 />
             </FormRow>
             <FormRow

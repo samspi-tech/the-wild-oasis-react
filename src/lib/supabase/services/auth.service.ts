@@ -1,11 +1,22 @@
 import { supabase } from '../supabase';
 
-export type AuthPayload = {
+export type LoginPayload = {
     email: string;
     password: string;
 };
 
-export async function login(payload: AuthPayload) {
+type SignupPayload = {
+    email: string;
+    password: string;
+    options?: {
+        data: {
+            avatar: string;
+            fullName: string;
+        };
+    };
+};
+
+export async function login(payload: LoginPayload) {
     const { data, error } = await supabase.auth.signInWithPassword(payload);
 
     if (error) throw new Error(error.message);
@@ -33,4 +44,12 @@ export async function logout() {
     const { error } = await supabase.auth.signOut();
 
     if (error) throw new Error(error.message);
+}
+
+export async function signup(payload: SignupPayload) {
+    const { data, error } = await supabase.auth.signUp(payload);
+
+    if (error) throw new Error(error.message);
+
+    return data;
 }
