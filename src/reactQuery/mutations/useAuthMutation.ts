@@ -15,11 +15,11 @@ export default function useAuthMutation() {
 
     const { mutate: handleLogin, isPending: isLogingIn } = useMutation({
         mutationFn: (payload: LoginPayload) => login(payload),
-        onSuccess: (data) => {
-            const userName = data.user.user_metadata.fullName;
-            toast.success(`Welcome back ${userName ?? 'Admin'}!`);
+        onSuccess: ({ user }) => {
+            const userName: string = user.user_metadata.fullName ?? 'Admin';
+            toast.success(`Welcome back ${userName}!`);
 
-            queryClient.setQueryData(['user'], data.user);
+            queryClient.setQueryData(['user'], user);
 
             navigate('/', { replace: true });
         },

@@ -1,5 +1,7 @@
 import Row from '@/ui/Row';
 import Heading from '@/ui/Heading';
+import UpdateUserDataForm from '@/features/auth/UpdateUserDataForm';
+import UpdatePasswordForm from '@/features/auth/UpdatePasswordForm';
 
 export default function Account() {
     return (
@@ -7,11 +9,11 @@ export default function Account() {
             <Heading as="h1">Update your account</Heading>
             <Row>
                 <Heading as="h3">Update user data</Heading>
-                <p>Update user data form</p>
+                <UpdateUserDataForm />
             </Row>
             <Row>
                 <Heading as="h3">Update password</Heading>
-                <p>Update user password form</p>
+                <UpdatePasswordForm />
             </Row>
         </>
     );

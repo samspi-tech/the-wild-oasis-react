@@ -1,7 +1,7 @@
 import { supabase } from '@/lib/supabase/supabase';
 import { type CabinSchema } from '@/zod/cabinSchema';
 import { type Tables } from '@/lib/supabase/database.types';
-import { uploadImage, getImageFileDetails } from '@/utils/cabinImageUpload';
+import { uploadCabinImage, getImageFileDetails } from '@/utils/imagesUpload';
 
 export type Cabins = Tables<'cabins'>;
 
@@ -19,7 +19,7 @@ export async function getAllCabins() {
 export async function createCabin(payload: CabinSchema) {
     const imageFromString = payload.image as string;
 
-    const imageDetails = getImageFileDetails(payload);
+    const imageDetails = getImageFileDetails(payload.image, 'cabin-images');
     const imageFromFile = imageDetails?.imagePath;
 
     const { id, ...fields } = payload;
@@ -43,7 +43,9 @@ export async function createCabin(payload: CabinSchema) {
     if (payload.image instanceof File === false) return data;
 
     const cabinId = data.id;
-    await uploadImage(cabinId, imageDetails!.imageName, payload);
+    const imageName = imageDetails!.imageName;
+
+    await uploadCabinImage(cabinId, imageName, payload.image);
 
     return data;
 }
@@ -51,7 +53,7 @@ export async function createCabin(payload: CabinSchema) {
 export async function updateCabin(payload: CabinSchema, id?: number) {
     const imageFromString = payload.image as string;
 
-    const imageDetails = getImageFileDetails(payload);
+    const imageDetails = getImageFileDetails(payload.image, 'cabin-images');
     const imageFromFile = imageDetails?.imagePath;
 
     const updatedCabin = {
@@ -74,7 +76,9 @@ export async function updateCabin(payload: CabinSchema, id?: number) {
     if (payload.image instanceof File === false) return data;
 
     const cabinId = data.id;
-    await uploadImage(cabinId, imageDetails!.imageName, payload);
+    const imageName = imageDetails!.imageName;
+
+    await uploadCabinImage(cabinId, imageName, payload.image);
 
     return data;
 }
