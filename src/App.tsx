@@ -14,9 +14,9 @@ import PageNotFound from './pages/PageNotFound';
 import GlobalStyles from './styles/GlobalStyles';
 import ProtectedRoutes from './ui/ProtectedRoutes';
 import { queryClient } from './reactQuery/queryClient';
+import { ThemeProvider } from './contexts/ThemeContext';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import { ThemeProvider } from './contexts/ThemeContext';
 
 export default function App() {
     return (
