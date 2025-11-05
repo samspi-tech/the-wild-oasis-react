@@ -6,7 +6,7 @@ import {
 
 import { useState } from 'react';
 import styled from 'styled-components';
-import { HiEye } from 'react-icons/hi2';
+import { HiEye, HiEyeSlash } from 'react-icons/hi2';
 
 type InputPasswordProps<T extends FieldValues> = {
     id: Path<T>;
@@ -74,7 +74,7 @@ export default function InputPassword<T extends FieldValues>({
                 aria-label="Toggle show password"
                 onClick={handleToggleShowPassword}
             >
-                <HiEye />
+                {inputType === 'password' ? <HiEye /> : <HiEyeSlash />}
             </Icon>
         </InputContainer>
     );
