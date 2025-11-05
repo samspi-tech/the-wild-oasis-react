@@ -14,3 +14,8 @@ export function formatDistanceFromNow(dateStr: string) {
         .replace('about ', '')
         .replace('in', 'In');
 }
+
+export function toggleTheme(add: string, remove: string) {
+    document.documentElement.classList.add(add);
+    document.documentElement.classList.remove(remove);
+}

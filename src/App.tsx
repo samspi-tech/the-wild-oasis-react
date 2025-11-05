@@ -16,43 +16,46 @@ import ProtectedRoutes from './ui/ProtectedRoutes';
 import { queryClient } from './reactQuery/queryClient';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { ThemeProvider } from './contexts/ThemeContext';
 
 export default function App() {
     return (
-        <QueryClientProvider client={queryClient}>
-            <ReactQueryDevtools initialIsOpen={false} />
+        <ThemeProvider>
+            <QueryClientProvider client={queryClient}>
+                <ReactQueryDevtools initialIsOpen={false} />
 
-            <Toast />
-            <GlobalStyles />
-            <Router>
-                <Routes>
-                    <Route
-                        element={
-                            <ProtectedRoutes>
-                                <AppLayout />
-                            </ProtectedRoutes>
-                        }
-                    >
-                        <Route index path="/" element={<Dashboard />} />
-                        <Route path="/users" element={<Users />} />
-                        <Route path="/cabins" element={<Cabins />} />
-                        <Route path="/account" element={<Account />} />
-                        <Route path="/settings" element={<Settings />} />
-                        <Route path="/bookings" element={<Bookings />} />
+                <Toast />
+                <GlobalStyles />
+                <Router>
+                    <Routes>
                         <Route
-                            path="/bookings/:bookingId"
-                            element={<Booking />}
-                        />
-                        <Route
-                            path="/checkin/:bookingId"
-                            element={<CheckIn />}
-                        />
-                    </Route>
+                            element={
+                                <ProtectedRoutes>
+                                    <AppLayout />
+                                </ProtectedRoutes>
+                            }
+                        >
+                            <Route index path="/" element={<Dashboard />} />
+                            <Route path="/users" element={<Users />} />
+                            <Route path="/cabins" element={<Cabins />} />
+                            <Route path="/account" element={<Account />} />
+                            <Route path="/settings" element={<Settings />} />
+                            <Route path="/bookings" element={<Bookings />} />
+                            <Route
+                                path="/bookings/:bookingId"
+                                element={<Booking />}
+                            />
+                            <Route
+                                path="/checkin/:bookingId"
+                                element={<CheckIn />}
+                            />
+                        </Route>
 
-                    <Route path="/login" element={<Login />} />
-                    <Route path="*" element={<PageNotFound />} />
-                </Routes>
-            </Router>
-        </QueryClientProvider>
+                        <Route path="/login" element={<Login />} />
+                        <Route path="*" element={<PageNotFound />} />
+                    </Routes>
+                </Router>
+            </QueryClientProvider>
+        </ThemeProvider>
     );
 }
