@@ -1,10 +1,11 @@
 import Stats from './Stats';
 import Spinner from '@/ui/Spinner';
-import styled from 'styled-components';
+import SalesChart from './salesChart/SalesChart';
 
+import styled from 'styled-components';
+import useCabinQuery from '@/reactQuery/queries/useCabinQuery';
 import useRecentStays from '@/reactQuery/queries/useRecentStays';
 import useRecentBookings from '@/reactQuery/queries/useRecentBookings';
-import useCabinQuery from '@/reactQuery/queries/useCabinQuery';
 
 const StyledDashboardLayout = styled.div`
     gap: 2.4rem;
@@ -24,13 +25,13 @@ export default function DashboardLayout() {
         <StyledDashboardLayout>
             <Stats
                 numDays={numDays}
+                bookings={recentBookings}
                 cabinsCount={cabins?.length}
-                recentBookings={recentBookings}
                 confirmedStays={confirmedStays}
             />
             <div>today's activity</div>
             <div>chart stay duration</div>
-            <div>chart sales</div>
+            <SalesChart bookings={recentBookings} numDays={numDays} />
         </StyledDashboardLayout>
     );
 }

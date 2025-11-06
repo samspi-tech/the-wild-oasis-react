@@ -14,19 +14,19 @@ import { formatCurrency } from '@/utils/helpers';
 type StatsProps = {
     numDays: number;
     cabinsCount?: number;
-    recentBookings?: BookingsAfterDate;
+    bookings?: BookingsAfterDate;
     confirmedStays?: StaysAfterDate[];
 };
 
 export default function Stats({
     numDays,
+    bookings,
     cabinsCount,
-    recentBookings,
     confirmedStays,
 }: StatsProps) {
-    const numBookings = recentBookings?.length;
+    const numBookings = bookings?.length;
 
-    const totalSales = recentBookings?.reduce((acc, cur) => {
+    const totalSales = bookings?.reduce((acc, cur) => {
         return acc + cur.totalPrice!;
     }, 0);
 
