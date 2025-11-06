@@ -1,10 +1,17 @@
 import { supabase } from '../supabase';
+import { getToday } from '@/utils/helpers';
 import { PAGE_SIZE } from '@/utils/amounts';
 import { type Cabins } from './cabin.service';
 import { type Tables } from '../database.types';
 
 type Guests = Tables<'guests'>;
 type Bookings = Tables<'bookings'>;
+
+export type StaysAfterDate = Bookings & {
+    guests: {
+        fullName: string | null;
+    } | null;
+};
 
 type BookingCabin = {
     cabins: {
@@ -49,6 +56,12 @@ export type UpdateBookingArgs = {
         hasBreakfast?: boolean;
     };
 };
+
+export type BookingsAfterDate = {
+    created_at: string;
+    totalPrice: number | null;
+    extrasPrice: number | null;
+}[];
 
 export async function getAllBookings({
     filter,
@@ -118,5 +131,35 @@ export async function deleteBooking(id: number) {
         console.error(error);
         throw new Error('Booking could not be deleted');
     }
+    return data;
+}
+
+export async function getBookingsAfterDate(date: string) {
+    const { data, error } = await supabase
+        .from('bookings')
+        .select('created_at, totalPrice, extrasPrice')
+        .gte('created_at', date)
+        .lte('created_at', getToday({ end: true }));
+
+    if (error) {
+        console.error(error);
+        throw new Error('Bookings could not get loaded');
+    }
+
+    return data;
+}
+
+export async function getStaysAfterDate(date: string) {
+    const { data, error } = await supabase
+        .from('bookings')
+        .select('*, guests(fullName)')
+        .gte('startDate', date)
+        .lte('startDate', getToday());
+
+    if (error) {
+        console.error(error);
+        throw new Error('Bookings could not get loaded');
+    }
+
     return data;
 }

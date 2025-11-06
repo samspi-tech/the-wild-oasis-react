@@ -66,7 +66,7 @@ export default function Filter({ searchParameter, options }: FilterProps) {
                 const { id, value, label } = option;
                 const filter = searchParams.get(searchParameter);
 
-                const hasNoFilter = !filter && label === 'All';
+                const hasNoFilter = !filter && label === options[0].label;
                 const isActiveButton = hasNoFilter || filter === value;
 
                 return (
