@@ -6,7 +6,10 @@ export default function ThemeToggle() {
     const { isDarkMode, handleToggleDarkMode } = useDarkMode();
 
     return (
-        <ButtonIcon onClick={handleToggleDarkMode}>
+        <ButtonIcon
+            onClick={handleToggleDarkMode}
+            aria-label="Toggle dark or light mode"
+        >
             {isDarkMode ? <HiOutlineSun /> : <HiOutlineMoon />}
         </ButtonIcon>
     );

@@ -17,7 +17,10 @@ export default function HeaderMenu() {
     return (
         <StyledHeaderMenu>
             <li>
-                <ButtonIcon onClick={() => navigate('/account')}>
+                <ButtonIcon
+                    onClick={() => navigate('/account')}
+                    aria-label="Navigate to update account"
+                >
                     <HiOutlineUser />
                 </ButtonIcon>
             </li>
