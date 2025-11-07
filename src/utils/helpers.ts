@@ -45,7 +45,7 @@ export function getChartData(numDays: number, bookings?: BookingsAfterDate) {
     });
 
     return allBookingDates.map((date) => {
-        const label = format(date, 'MMM dd');
+        const label = format(date, 'MMM dd yyyy');
 
         const matchDateBookings = bookings?.filter(({ created_at }) => {
             return isSameDay(date, new Date(created_at));

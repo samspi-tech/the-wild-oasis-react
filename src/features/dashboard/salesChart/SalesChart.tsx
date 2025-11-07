@@ -7,6 +7,7 @@ import {
     CartesianGrid,
     ResponsiveContainer,
 } from 'recharts';
+import { format } from 'date-fns';
 import styled from 'styled-components';
 import useDarkMode from '@/hooks/useDarkMode';
 import { darkModeColors, lightModeColors } from './dataSource';
@@ -38,9 +39,14 @@ export default function SalesChart({ bookings, numDays }: SalesChartProps) {
 
     const chartData = getChartData(numDays, bookings);
 
+    const salesFrom = format(chartData.at(0)!.label, 'MMM dd yyyy');
+    const salesTo = format(chartData.at(-1)!.label, 'MMM dd yyyy');
+
     return (
         <StyledSalesChart>
-            <Heading as="h2">Sales</Heading>
+            <Heading as="h2">
+                Sales from {salesFrom} &mdash; {salesTo}
+            </Heading>
             <ResponsiveContainer width="100%" height={300}>
                 <AreaChart data={chartData}>
                     <YAxis
