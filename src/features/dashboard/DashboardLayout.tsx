@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import useCabinQuery from '@/reactQuery/queries/useCabinQuery';
 import useRecentStays from '@/reactQuery/queries/useRecentStays';
 import useRecentBookings from '@/reactQuery/queries/useRecentBookings';
+import DurationChart from './durationChart/DurationChart';
 
 const StyledDashboardLayout = styled.div`
     gap: 2.4rem;
@@ -30,7 +31,7 @@ export default function DashboardLayout() {
                 confirmedStays={confirmedStays}
             />
             <div>today's activity</div>
-            <div>chart stay duration</div>
+            <DurationChart confirmedStays={confirmedStays} />
             <SalesChart bookings={recentBookings} numDays={numDays} />
         </StyledDashboardLayout>
     );
