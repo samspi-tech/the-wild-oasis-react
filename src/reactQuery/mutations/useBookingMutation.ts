@@ -1,12 +1,11 @@
 import {
     deleteBooking,
     updateBooking,
-    type UpdateBookingArgs,
 } from '@/lib/supabase/services/bookings.service';
-
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { type UpdateBookingArgs } from '@/lib/supabase/services/types/types';
 
 export default function useBookingMutation() {
     const navigate = useNavigate();
