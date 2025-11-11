@@ -31,10 +31,12 @@ const Buttons = styled.div`
 
 const PaginationButton = styled.button`
     border: none;
+    color: inherit;
     font-weight: 500;
     font-size: 1.4rem;
     transition: all 0.3s;
     padding: 0.6rem 1.2rem;
+    background-color: var(--color-grey-50);
     border-radius: var(--border-radius-sm);
 
     gap: 0.4rem;
