@@ -3,12 +3,12 @@
 ### Built with:
 
 [![React][React.js]][React-url]
+[![StyledComponents][StyledComponents]][StyledComponents-url]
 [![Supabase][Supabase]][Supabase-url]
 
 ### Libraries used in this project:
 
 <ul>
-<li>Styled Components</li>
 <li>React Query</li>
 <li>React Hook Form</li>
 <li>Zod</li>
@@ -26,3 +26,5 @@ Udemy course: [The Ultimate React Course](https://www.udemy.com/course/the-ultim
 [Supabase-url]: https://supabase.com/
 [React.js]: https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB
 [React-url]: https://react.dev/
+[StyledComponents]: https://img.shields.io/badge/styled--components-DB7093?style=for-the-badge&logo=styled-components&logoColor=ffd35b
+[StyledComponents-url]:https://styled-components.com/
