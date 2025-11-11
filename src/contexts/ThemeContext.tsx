@@ -14,8 +14,16 @@ export const ThemeContext = createContext<ThemeContextValues | null>(null);
 
 export function ThemeProvider({ children }: ThemeContextProviderProps) {
     const [isDarkMode, setIsDarkMode] = useState(() => {
-        const theme = localStorage.getItem('theme');
-        const currTheme: string = theme ? JSON.parse(theme) : 'dark';
+        const isBrowserThemeDark = window.matchMedia(
+            '(prefers-color-scheme: dark)'
+        ).matches;
+
+        const browserTheme = isBrowserThemeDark ? 'dark' : 'light';
+        const localStorageTheme = localStorage.getItem('localStorageTheme');
+
+        const currTheme: string = !localStorageTheme
+            ? browserTheme
+            : JSON.parse(localStorageTheme);
 
         return currTheme === 'dark';
     });
@@ -27,10 +35,10 @@ export function ThemeProvider({ children }: ThemeContextProviderProps) {
     useEffect(() => {
         if (isDarkMode) {
             toggleTheme('dark-mode', 'light-mode');
-            localStorage.setItem('theme', JSON.stringify('dark'));
+            localStorage.setItem('localStorageTheme', JSON.stringify('dark'));
         } else {
             toggleTheme('light-mode', 'dark-mode');
-            localStorage.setItem('theme', JSON.stringify('light'));
+            localStorage.setItem('localStorageTheme', JSON.stringify('light'));
         }
     }, [isDarkMode]);
 

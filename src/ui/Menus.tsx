@@ -143,6 +143,7 @@ function Toggles({ id }: TogglesProps) {
         useContext(MenusContext)!;
 
     const handleToggle = (e: MouseEvent) => {
+        e.stopPropagation();
         const position = getMenuButtonPosition(e)!;
         setMenuButtonPosition(position);
 
@@ -166,7 +167,7 @@ function List({ id, children }: ListProps) {
     const { openId, menuButtonPosition, handleClose } =
         useContext(MenusContext)!;
 
-    const listRef = useOutsideClick({ handleClose });
+    const listRef = useOutsideClick({ handleClose, isEventCapturing: false });
 
     if (openId !== propId) return null;
 

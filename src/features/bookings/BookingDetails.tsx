@@ -1,5 +1,6 @@
 import Row from '@/ui/Row';
 import Tag from '@/ui/Tag';
+import Empty from '@/ui/Empty';
 import Modal from '@/ui/Modal';
 import Button from '@/ui/Button';
 import Heading from '@/ui/Heading';
@@ -30,8 +31,8 @@ export default function BookingDetails() {
     const { isUpdating, isDeleting, handleUpdateBooking, handleDeleteBooking } =
         useBookingMutation();
 
-    if (!singleBooking) return;
     if (isLoading) return <Spinner />;
+    if (!singleBooking) return <Empty resourceName="booking" />;
 
     const { status, id: bookingId } = singleBooking;
 
