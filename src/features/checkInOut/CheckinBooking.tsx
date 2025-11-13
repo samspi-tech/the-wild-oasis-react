@@ -27,7 +27,7 @@ export default function CheckinBooking() {
     const [isConfirmPaid, setIsConfirmPaid] = useState(false);
     const [isAddBreakfast, setIsAddBreakfast] = useState(false);
     const { isLoading, singleBooking } = useSingleBookingQuery();
-    const { isPending, handleUpdateBooking } = useBookingMutation();
+    const { isUpdating, handleUpdateBooking } = useBookingMutation();
     const { settings, isLoading: isLoadingSettings } = useSettingsQuery();
 
     useEffect(() => {
@@ -107,7 +107,7 @@ export default function CheckinBooking() {
                         id="add-breakfast"
                         isChecked={isAddBreakfast}
                         onChange={handleAddBreakfast}
-                        isDisabled={isAddBreakfast || isPending}
+                        isDisabled={isAddBreakfast || isUpdating}
                     >
                         Want to add breakfast for{' '}
                         {formatCurrency(optionalBreakfastPrice)}?
@@ -119,7 +119,7 @@ export default function CheckinBooking() {
                     id="confirm-check-in"
                     isChecked={isConfirmPaid}
                     onChange={handleIsConfirmPaid}
-                    isDisabled={isConfirmPaid || isPending}
+                    isDisabled={isConfirmPaid || isUpdating}
                 >
                     I confirm that {fullName} has paid the total amount of{' '}
                     {formatCurrency(bookingTotalPrice!)}
@@ -134,7 +134,7 @@ export default function CheckinBooking() {
             <ButtonGroup>
                 <Button
                     onClick={handleCheckIn}
-                    disabled={!isConfirmPaid || isPending}
+                    disabled={!isConfirmPaid || isUpdating}
                 >
                     Check in booking #{bookingId}
                 </Button>

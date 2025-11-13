@@ -10,12 +10,12 @@ import {
 import { format } from 'date-fns';
 import styled from 'styled-components';
 import useDarkMode from '@/hooks/useDarkMode';
+import { getChartData } from '@/utils/helpers';
 import { darkModeColors, lightModeColors } from './dataSource';
-import { type BookingsAfterDate } from '@/lib/supabase/services/bookings.service';
+import { type BookingsAfterDate } from '@/lib/supabase/services/types/types';
 
 import Heading from '@/ui/Heading';
 import DashboardBox from '../DashboardBox';
-import { getChartData } from '@/utils/helpers';
 
 type SalesChartProps = {
     numDays: number;

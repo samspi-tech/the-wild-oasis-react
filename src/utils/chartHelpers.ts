@@ -1,4 +1,4 @@
-import { type StaysAfterDate } from '@/lib/supabase/services/bookings.service';
+import { type StaysAfterDate } from '@/lib/supabase/services/types/types';
 import { type StartDataPieChart } from '@/features/dashboard/durationChart/dataSource';
 
 function increaseStartDataValue(

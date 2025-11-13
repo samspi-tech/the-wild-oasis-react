@@ -11,7 +11,7 @@ import styled from 'styled-components';
 import useDarkMode from '@/hooks/useDarkMode';
 import { preparePieChartData } from '@/utils/chartHelpers';
 import { startDataDarkTheme, startDataLightTheme } from './dataSource';
-import { type StaysAfterDate } from '@/lib/supabase/services/bookings.service';
+import { type StaysAfterDate } from '@/lib/supabase/services/types/types';
 
 type DurationChartProps = {
     confirmedStays?: StaysAfterDate[];

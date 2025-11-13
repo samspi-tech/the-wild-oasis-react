@@ -15,9 +15,9 @@ import styled from 'styled-components';
 import { format, isToday } from 'date-fns';
 import { statusToTagName } from './dataSource';
 import { useNavigate } from 'react-router-dom';
+import { AllBookings } from '@/lib/supabase/services/types/types';
 import { formatCurrency, formatDistanceFromNow } from '@/utils/helpers';
 import useBookingMutation from '@/reactQuery/mutations/useBookingMutation';
-import { type AllBookings } from '@/lib/supabase/services/bookings.service';
 
 type BookingRowProps = {
     booking: AllBookings;

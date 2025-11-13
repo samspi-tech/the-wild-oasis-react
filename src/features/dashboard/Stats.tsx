@@ -1,13 +1,13 @@
 import {
-    type StaysAfterDate,
-    type BookingsAfterDate,
-} from '@/lib/supabase/services/bookings.service';
-import {
     HiOutlineBanknotes,
     HiOutlineChartBar,
     HiOutlineBriefcase,
     HiOutlineCalendarDays,
 } from 'react-icons/hi2';
+import {
+    type BookingsAfterDate,
+    type StaysAfterDate,
+} from '@/lib/supabase/services/types/types';
 import SingleStat from './SingleStat';
 import { formatCurrency } from '@/utils/helpers';
 

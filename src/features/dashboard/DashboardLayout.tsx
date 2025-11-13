@@ -1,13 +1,13 @@
 import Stats from './Stats';
 import Spinner from '@/ui/Spinner';
 import SalesChart from './salesChart/SalesChart';
+import TodayActivity from '../checkInOut/TodayActivity';
+import DurationChart from './durationChart/DurationChart';
 
 import styled from 'styled-components';
 import useCabinQuery from '@/reactQuery/queries/useCabinQuery';
 import useRecentStays from '@/reactQuery/queries/useRecentStays';
 import useRecentBookings from '@/reactQuery/queries/useRecentBookings';
-import DurationChart from './durationChart/DurationChart';
-import TodayActivity from '../checkInOut/TodayActivity';
 
 const StyledDashboardLayout = styled.div`
     gap: 2.4rem;

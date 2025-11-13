@@ -10,8 +10,8 @@ import DataItem from '@/ui/DataItem';
 
 import styled from 'styled-components';
 import { format, isToday } from 'date-fns';
+import { SingleBooking } from '@/lib/supabase/services/types/types';
 import { formatCurrency, formatDistanceFromNow } from '@/utils/helpers';
-import { type SingleBooking } from '@/lib/supabase/services/bookings.service';
 
 type PriceProps = {
     isPaid: boolean | null;
